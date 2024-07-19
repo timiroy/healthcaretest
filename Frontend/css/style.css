@@ -187,8 +187,7 @@ nav .sidebar {
 }
 
 .medical-history h3,
-.appointments h3,
-.chatbot h2 {
+.appointments h3 {
   padding-bottom: 10px;
   color: #494949;
   margin: 0 -10px;
@@ -209,8 +208,7 @@ nav .sidebar {
   margin-top: 10px;
 }
 
-.activity-card,
-.chatbot-card {
+.activity-card {
   background: white;
   padding: 10px 12px;
   margin: 0 -12px 10px -12px;
@@ -343,7 +341,7 @@ nav .sidebar {
 
 .left-section .health-overview,
 .left-section .prescription,
-.right-section .chatbot {
+.right-section {
   flex: 1;
   background-color: #fff;
   border-radius: 10px;
@@ -448,71 +446,4 @@ nav .sidebar {
   font-size: 10px;
   padding-left: 20px;
   margin-top: 5px;
-}
-
-.chatbot {
-  display: flex;
-  flex-direction: column;
-  background-color: #fff;
-  border-radius: 10px;
-  padding: 10px;
-  overflow-y: auto;
-}
-
-.chatbot header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.chatbox {
-  list-style: none;
-  padding: 0;
-}
-
-.chat {
-  display: flex;
-  align-items: center;
-  padding: 10px;
-}
-
-.chat.incoming {
-  justify-content: flex-start;
-}
-
-.chat .material-symbols-outlined {
-  font-size: 24px;
-  margin-right: 10px;
-}
-
-.chat p {
-  background-color: #e0e0e0;
-  padding: 10px;
-  border-radius: 10px;
-}
-
-.chat-input {
-  display: flex;
-  align-items: center;
-  border-top: 1px solid #cdcdcd;
-  padding-top: 10px;
-}
-
-.chat-input textarea {
-  flex: 1;
-  border: none;
-  resize: none;
-  padding: 10px;
-  border-radius: 10px;
-}
-
-.chat-input textarea:focus {
-  outline: none;
-}
-
-.chat-input .material-symbols-rounded {
-  font-size: 24px;
-  color: #4070f4;
-  cursor: pointer;
-  margin-left: 10px;
 }
