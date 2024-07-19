@@ -2,3 +2,4 @@ langchain
 streamlit
 boto3
 faiss-cpu
+mysql-connector-python

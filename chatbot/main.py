@@ -1,9 +1,9 @@
+import streamlit as st
+import boto3
+import os
 from langchain.chains import LLMChain
 from langchain_community.chat_models import BedrockChat  
 from langchain.prompts import PromptTemplate
-import boto3
-import os
-import streamlit as st
 
 # Set AWS profile
 os.environ["AWS_PROFILE"] = "default"
@@ -24,24 +24,13 @@ llm = BedrockChat(
 )
 
 def my_chatbot(language, freeform_text):
-    prompt = PromptTemplate(
-        input_variables=["language", "freeform_text"],
-        template="""
-            **Instructions**: You are a knowledgeable Medicare chatbot. Ensure that your responses are accurate, clear, and compliant with relevant health regulations. Specifically, adhere to the following compliance standards:
+    # Define your variables
+    client_name = "John Doe"
+    client_age = "45"
+    next_appointment = "July 20, 2024"
 
-            1. **HIPAA Compliance**: Protect personal health information (PHI) by avoiding the collection or sharing of sensitive data unless necessary. Ensure responses are made without compromising user privacy.
-
-            2. **GDPR Compliance**: Obtain and use personal data only with explicit user consent. Respect data protection rights and handle data securely.
-
-            3. **FISMA Compliance**: Implement risk management practices and ensure information security controls are in place to protect user data.
-
-            4. **PHIPA Compliance**: Collect, use, and disclose personal health information only with user consent, and protect it with appropriate security measures.
-
-            5. **21st Century Cures Act**: Ensure health information is interoperable and accessible, and follow guidelines for transparency and data use.
-
-            6. **Mobile Health Regulations**: If applicable, follow FDA guidelines for medical devices and ensure mobile health tools are secure and compliant.
-
-            7. **Accessibility Standards**: Adhere to Web Content Accessibility Guidelines (WCAG) to ensure that your responses are accessible to users with disabilities.
+    message_template="""
+            **Instructions**: You are a knowledgeable Medicare chatbot. Ensure that your responses are accurate, clear, and compliant with relevant health regulations. 
 
             **Context**: You have access to Medicare information and details about the client’s situation. Use this context to provide precise and relevant answers.
 
@@ -54,6 +43,15 @@ def my_chatbot(language, freeform_text):
 
             **Output**:
             """
+    formatted_message = message_template.format(
+        client_name=client_name,
+        client_age=client_age,
+        next_appointment=next_appointment,
+        freeform_text=freeform_text
+    )
+    prompt = PromptTemplate(
+        input_variables=["language", "freeform_text"],
+        template=formatted_message
     )
 
     bedrock_chain = LLMChain(llm=llm, prompt=prompt)
@@ -62,13 +60,42 @@ def my_chatbot(language, freeform_text):
     return response
 
 # Streamlit app
-st.title("Bedrock Chatbot")
+st.set_page_config(page_title="🦙💬 Llama 2 Chatbot")
 
-language = st.sidebar.selectbox("Language", ["english", "spanish"])
+# Store LLM generated responses
+if "messages" not in st.session_state.keys():
+    st.session_state.messages = [{"role": "assistant", "content": "How may I assist you today?"}]
 
-if language:
-    freeform_text = st.sidebar.text_area(label="What is your question?", max_chars=100)
+# Display or clear chat messages
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.write(message["content"])
 
-if freeform_text:
-    response = my_chatbot(language, freeform_text)
-    st.write(response['text'])
+def clear_chat_history():
+    st.session_state.messages = [{"role": "assistant", "content": "How may I assist you today?"}]
+st.sidebar.button('Clear Chat History', on_click=clear_chat_history)
+
+# Function for generating LLaMA2 response using Amazon Bedrock
+def generate_llama2_response(prompt_input):
+    response = my_chatbot('en', prompt_input)
+    return response['text']
+
+# User-provided prompt
+if prompt := st.chat_input():
+    st.session_state.messages.append({"role": "user", "content": prompt})
+    with st.chat_message("user"):
+        st.write(prompt)
+
+# Generate a new response if last message is not from assistant
+if st.session_state.messages[-1]["role"] != "assistant":
+    with st.chat_message("assistant"):
+        with st.spinner("Thinking..."):
+            response = generate_llama2_response(prompt)
+            placeholder = st.empty()
+            full_response = ''
+            for item in response:
+                full_response += item
+                placeholder.markdown(full_response)
+            placeholder.markdown(full_response)
+    message = {"role": "assistant", "content": full_response}
+    st.session_state.messages.append(message)
