@@ -7,6 +7,7 @@
     <!-- CSS -->
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/chatbot.css" />
+    <link rel="stylesheet" href="css/bills.css" />
 
     <!-- Boxicons CSS -->
     <link
@@ -25,7 +26,7 @@
     />
   </head>
 
-  <body>
+  <body onload="loadDashboard()">
     <nav>
       <div class="sidebar">
         <div class="logo">
@@ -35,44 +36,47 @@
         <div class="sidebar-content">
           <ul class="lists">
             <li class="list">
-              <a href="#" class="nav-link">
+              <a
+                href="/Frontend/pages/dashboard.html"
+                class="nav-link active"
+                id="dashboard-link"
+              >
                 <i class="bx bx-home-alt icon"></i>
                 <span class="link">Dashboard</span>
               </a>
             </li>
             <li class="list">
-              <a href="#" class="nav-link">
+              <a href="/Frontend/pages/appointment.html" class="nav-link">
                 <i class="bx bx-calendar icon"></i>
-                <!-- <i class="bx bx-bar-chart-alt-2 icon"></i> -->
                 <span class="link">Appointment</span>
               </a>
             </li>
             <li class="list">
-              <a href="#" class="nav-link">
+              <a href="/Frontend/pages/messages.html" class="nav-link">
                 <i class="bx bx-message-rounded icon"></i>
                 <span class="link">Messages</span>
               </a>
             </li>
             <li class="list">
-              <a href="#" class="nav-link">
+              <a href="/Frontend/pages/chatbot.html" class="nav-link">
                 <i class="bx bx-bot icon"></i>
                 <span class="link">AI Care</span>
               </a>
             </li>
             <li class="list">
-              <a href="#" class="nav-link">
+              <a href="/Frontend/pages/healthrecords.html" class="nav-link">
                 <i class="bx bx-pie-chart-alt-2 icon"></i>
                 <span class="link">Health Records</span>
               </a>
             </li>
             <li class="list">
-              <a href="#" class="nav-link">
+              <a href="/Frontend/pages/prescriptions.html" class="nav-link">
                 <i class="bx bx-heart icon"></i>
                 <span class="link">Prescriptions</span>
               </a>
             </li>
             <li class="list">
-              <a href="#" class="nav-link">
+              <a href="/Frontend/pages/billings.html" class="nav-link">
                 <i class="bx bx-folder-open icon"></i>
                 <span class="link">Billing and Insurance</span>
               </a>
@@ -80,7 +84,7 @@
           </ul>
           <div class="bottom-cotent">
             <li class="list">
-              <a href="#" class="nav-link">
+              <a href="/Frontend/pages/billings.html" class="nav-link">
                 <i class="bx bx-cog icon"></i>
                 <span class="link">Settings</span>
               </a>
@@ -117,313 +121,7 @@
       </div>
     </nav>
 
-    <div class="main-content">
-      <div class="top-section">
-        <div class="medical-history">
-          <h3>Medical Activity</h3>
-
-          <div class="activities">
-            <div class="activity-card">
-              <div class="activity-details">
-                <div class="activity-img">
-                  <img src="/Assets/bearded-doctor-glasses.jpg" alt="" />
-                </div>
-                <div class="details">
-                  <h4 class="activity-name">Dr Jordan</h4>
-                  <p class="activity-date">03 May, 2020</p>
-                </div>
-              </div>
-
-              <div class="activity-info">
-                Dr Jordan added two new conditions to your health record
-                regarding your symptoms.
-              </div>
-            </div>
-
-            <div class="activity-card">
-              <div class="activity-details">
-                <div class="activity-img">
-                  <img src="/Assets/bearded-doctor-glasses.jpg" alt="" />
-                </div>
-                <div class="details">
-                  <h4 class="activity-name">Dr Jordan</h4>
-                  <p class="activity-date">03 May, 2020</p>
-                </div>
-              </div>
-
-              <div class="activity-info">
-                Dr Jordan added two new conditions to your health record
-                regarding your symptoms.
-              </div>
-            </div>
-
-            <div class="activity-card">
-              <div class="activity-details">
-                <div class="activity-img">
-                  <img src="/Assets/bearded-doctor-glasses.jpg" alt="" />
-                </div>
-                <div class="details">
-                  <h4 class="activity-name">Dr Jordan</h4>
-                  <p class="activity-date">03 May, 2020</p>
-                </div>
-              </div>
-
-              <div class="activity-info">
-                Dr Jordan added two new conditions to your health record
-                regarding your symptoms.
-              </div>
-            </div>
-
-            <div class="activity-card">
-              <div class="activity-details">
-                <div class="activity-img">
-                  <img src="/Assets/bearded-doctor-glasses.jpg" alt="" />
-                </div>
-                <div class="details">
-                  <h4 class="activity-name">Dr Jordan</h4>
-                  <p class="activity-date">03 May, 2020</p>
-                </div>
-              </div>
-
-              <div class="activity-info">
-                Dr Jordan added two new conditions to your health record
-                regarding your symptoms.
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="appointments">
-          <h3>Upcoming Appointments</h3>
-
-          <div class="appointments-container">
-            <div class="appointment-card">
-              <div>
-                <p class="appointment-title">Surgery Preparation</p>
-
-                <div class="appointment-doctor">
-                  <div class="doctor-img">
-                    <img src="/Assets/bearded-doctor-glasses.jpg" alt="" />
-                  </div>
-
-                  <div class="doctor-details">
-                    <h4 class="doctor-name">Dr. Damian Lewis</h4>
-                    <p class="doctor-title">Cardiologist</p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="appointment-schedule">
-                <div class="appointment-date">
-                  <span>June 12, 2023</span>
-                </div>
-
-                <div class="appointment-time">
-                  <i class="bx bx-stopwatch"></i>
-                  <span>9.00 AM - 10.00AM</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="appointment-card">
-              <div>
-                <p class="appointment-title">Surgery Preparation</p>
-
-                <div class="appointment-doctor">
-                  <div class="doctor-img">
-                    <img src="/Assets/bearded-doctor-glasses.jpg" alt="" />
-                  </div>
-
-                  <div class="doctor-details">
-                    <h4 class="doctor-name">Dr. Damian Lewis</h4>
-                    <p class="doctor-title">Cardiologist</p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="appointment-schedule">
-                <div class="appointment-date">
-                  <span>June 12, 2023</span>
-                </div>
-
-                <div class="appointment-time">
-                  <i class="bx bx-stopwatch"></i>
-                  <span>9.00 AM - 10.00AM</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="bottom-section">
-        <div class="left-section">
-          <div class="health-overview">
-            <h3>Health Overview</h3>
-            <div class="container">
-              <div class="health-card">
-                <div class="health-condition">
-                  <div class="health-icon">
-                    <img src="/Assets//icons/heartbeat_2150832.png" alt="" />
-                  </div>
-
-                  <div class="condition-rate">
-                    <p class="condition">Heart Rate</p>
-                    <p class="rate">Normal</p>
-                  </div>
-                </div>
-
-                <p class="value">120bpm</p>
-              </div>
-
-              <div class="health-card">
-                <div class="health-condition">
-                  <div class="health-icon">
-                    <img src="/Assets//icons/blood-drop_10376417.png" alt="" />
-                  </div>
-
-                  <div class="condition-rate">
-                    <p class="condition">Blood Count</p>
-                    <p class="rate">Normal</p>
-                  </div>
-                </div>
-
-                <p class="value">80-90</p>
-              </div>
-
-              <div class="health-card">
-                <div class="health-condition">
-                  <div class="health-icon">
-                    <img
-                      src="/Assets//icons/blood-donation_7006319.png"
-                      alt=""
-                    />
-                  </div>
-
-                  <div class="condition-rate">
-                    <p class="condition">Glucose</p>
-                    <p class="rate">Normal</p>
-                  </div>
-                </div>
-
-                <p class="value">230 /ml</p>
-              </div>
-
-              <div class="health-card">
-                <div class="health-condition">
-                  <div class="health-icon">
-                    <img src="/Assets//icons/health_7903776.png" alt="" />
-                  </div>
-
-                  <div class="condition-rate">
-                    <p class="condition">Hemoglobin</p>
-                    <p class="rate">Normal</p>
-                  </div>
-                </div>
-
-                <p class="value">56 /ml</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="prescription">
-            <h3>Your Prescriptions</h3>
-            <div class="prescription-container">
-              <div class="prescription-card">
-                <p class="prescription-name">Paracetamol - 500mg</p>
-                <p class="usage">1 tablet every day for 2 weeks</p>
-
-                <div class="dosage">
-                  <div class="dosage-hour">
-                    <div class="hour">
-                      <img src="/Assets/icons/sunrise_11639071.png" />
-                      <span>Morning</span>
-                    </div>
-
-                    <p class="quantity">1-pill</p>
-                  </div>
-
-                  <div class="dosage-hour">
-                    <div class="hour">
-                      <img src="/Assets/icons/sunset_4229285.png" />
-                      <span>Afternoon</span>
-                    </div>
-
-                    <p class="quantity">1-pill</p>
-                  </div>
-
-                  <div class="dosage-hour">
-                    <div class="hour">
-                      <img src="/Assets/icons/moon_768442.png" />
-                      <span>Evening</span>
-                    </div>
-
-                    <p class="quantity">1-pill</p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="prescription-card">
-                <p class="prescription-name">Liquifying - 450ml</p>
-                <p class="usage">1 teaspoon every day for 2 weeks</p>
-
-                <div class="dosage">
-                  <div class="dosage-hour">
-                    <div class="hour">
-                      <img src="/Assets/icons/sunrise_11639071.png" />
-                      <span>Morning</span>
-                    </div>
-
-                    <p class="quantity">1-spoon</p>
-                  </div>
-
-                  <div class="dosage-hour">
-                    <div class="hour">
-                      <img src="/Assets/icons/sunset_4229285.png" />
-                      <span>Afternoon</span>
-                    </div>
-
-                    <p class="quantity">1-spoon</p>
-                  </div>
-
-                  <div class="dosage-hour">
-                    <div class="hour">
-                      <img src="/Assets/icons/moon_768442.png" />
-                      <span>Evening</span>
-                    </div>
-
-                    <p class="quantity">1-spoon</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="right-section">
-          <div class="chatbot">
-            <header>
-              <h2>Chatbot</h2>
-              <span class="close-btn material-symbols-outlined">close</span>
-            </header>
-            <ul class="chatbox">
-              <li class="chat incoming">
-                <span class="material-symbols-outlined">smart_toy</span>
-                <p>Hi there 👋<br />How can I help you today?</p>
-              </li>
-            </ul>
-            <div class="chat-input">
-              <textarea
-                placeholder="Enter a message..."
-                spellcheck="false"
-                required
-              ></textarea>
-              <span id="send-btn" class="material-symbols-rounded">send</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <div class="main-content"></div>
 
     <!-- CHATBOT -->
     <button class="chatbot-toggler">
