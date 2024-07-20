@@ -2,11 +2,20 @@ const formOpenBtn = document.querySelector("#form-open"),
   home = document.querySelector(".home"),
   formContainer = document.querySelector(".form_container"),
   formCloseBtn = document.querySelector(".form_close"),
-  signupBtn = document.querySelector("#signup"),
-  loginBtn = document.querySelector("#login"),
-  pwShowHide = document.querySelectorAll(".pw_hide");
+  signup = document.querySelector("#signup"),
+  login = document.querySelector("#login"),
+  signup_btn = document.querySelector("#signup-btn");
+login_btn = document.querySelector("#login-btn");
+pwShowHide = document.querySelectorAll(".pw_hide");
+
+// Function to handle successful login and redirect to dashboard
+function redirectToDashboard() {
+  window.location.href = "../../Frontend/pages/sidebar.html";
+}
+
 formOpenBtn.addEventListener("click", () => home.classList.add("show"));
 formCloseBtn.addEventListener("click", () => home.classList.remove("show"));
+
 pwShowHide.forEach((icon) => {
   icon.addEventListener("click", () => {
     let getPwInput = icon.parentElement.querySelector("input");
@@ -19,11 +28,28 @@ pwShowHide.forEach((icon) => {
     }
   });
 });
-signupBtn.addEventListener("click", (e) => {
+
+signup.addEventListener("click", (e) => {
   e.preventDefault();
   formContainer.classList.add("active");
 });
-loginBtn.addEventListener("click", (e) => {
+
+login.addEventListener("click", (e) => {
   e.preventDefault();
-  formContainer.classList.remove("active");
+  console.log("clicked");
+  // Mock login success - replace this with actual login logic
+  redirectToDashboard(); // Redirect to dashboard upon successful login
+});
+
+signup_btn.addEventListener("click", (e) => {
+  e.preventDefault();
+  redirectToDashboard();
+  // formContainer.classList.add("active");
+});
+
+login_btn.addEventListener("click", (e) => {
+  e.preventDefault();
+  console.log("clicked");
+  // Mock login success - replace this with actual login logic
+  redirectToDashboard(); // Redirect to dashboard upon successful login
 });
