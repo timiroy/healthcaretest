@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const navLinks = document.querySelectorAll(".nav-link");
+  const navLinks = document.querySelectorAll(".tab-link");
   const mainContent = document.querySelector(".main-content");
 
   async function loadContent(url) {
@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Function to check for active link on page load and load its content
   function checkActiveLink() {
-    const activeLink = document.querySelector(".nav-link.active");
+    const activeLink = document.querySelector(".tab-link.active");
     if (activeLink) {
       const url = activeLink.getAttribute("href");
       loadContent(url);
