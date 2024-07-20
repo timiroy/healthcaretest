@@ -98,6 +98,7 @@ nav .sidebar {
   flex-direction: column;
   justify-content: space-between;
   padding: 30px 16px;
+  gap: 10px;
 }
 .sidebar-content .list {
   list-style: none;

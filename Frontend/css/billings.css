@@ -18,12 +18,9 @@
   color: #494949;
 }
 
-.billings {
-  /* overflow-x: auto; */
-}
-
-.table-container {
-  width: 100%;
+.scrollable-table-container {
+  max-height: 90%;
+  overflow-y: auto;
 }
 
 .billings-table {

@@ -1,0 +1,61 @@
+.prescription-content {
+  margin-top: 70px;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 90px);
+  background-color: white;
+  border-radius: 10px;
+}
+
+.prescription-container {
+  display: flex;
+  height: 100%;
+  border-radius: 10px;
+  background-color: white;
+  justify-content: flex-start;
+  gap: 20px;
+}
+
+.prescription-name {
+  margin-left: 10px;
+  font-weight: 500;
+}
+
+.prescription-content h3 {
+  padding-bottom: 10px;
+  color: #494949;
+  padding: 10px 10px 10px 10px;
+}
+
+.prescription-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border: 3px solid #faf9f6;
+  border-radius: 10px;
+  padding: 15px 0px;
+  max-height: 150px;
+  margin: 20px;
+}
+
+.dosage {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 10px;
+}
+
+.hour {
+  margin: 0px 10px;
+  display: flex;
+  gap: 5px;
+}
+
+.hour span {
+  font-size: 10px;
+}
+
+.dosage-hour .quantity {
+  font-size: 10px;
+  padding-left: 20px;
+  margin-top: 5px;
+}

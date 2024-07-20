@@ -22,12 +22,12 @@ document.addEventListener("DOMContentLoaded", function () {
     link.addEventListener("click", function (event) {
       event.preventDefault();
       const url = link.getAttribute("href");
-      activateLink(link);
+      activateLink(this); // Changed 'link' to 'this' to refer to the clicked element
       loadContent(url);
     });
   });
 
-  // Check for active link on page load and load its content
+  // Function to check for active link on page load and load its content
   function checkActiveLink() {
     const activeLink = document.querySelector(".nav-link.active");
     if (activeLink) {
@@ -36,5 +36,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  window.checkActiveLink = checkActiveLink; // Expose checkActiveLink function to the global scope
+  // Call checkActiveLink immediately after defining it to load the dashboard by default
+  checkActiveLink();
 });
