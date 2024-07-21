@@ -41,26 +41,28 @@ jobs:
       run: aws cloudformation validate-template --template-body file://server-deployment/server.yaml
 
     - name: Deploy CloudFormation stack
+      if: ${{ github.event.inputs.action == 'create' }}
       run: |
-        if [ "${{ github.event.inputs.action }}" == 'create' ]; then
-          aws cloudformation deploy \
-            --template-file server-deployment/server.yaml \
-            --stack-name ${{ env.STACK_NAME }} \
-            --parameter-overrides \
-              InstanceType=t2.micro \
-              KeyName=AiHealth \
-              AMI=${{ secrets.AMI }} \
-              DBUsername=${{ secrets.DBUsername }} \
-              DBPassword=${{ secrets.DBPassword }} \
-              DBAllocatedStorage=20 \
-              DBInstanceClass=db.t3.micro \
-            --capabilities CAPABILITY_NAMED_IAM
-        elif [ "${{ github.event.inputs.action }}" == 'delete' ]; then
-          aws cloudformation delete-stack --stack-name ${{ env.STACK_NAME }}
-        fi
+        aws cloudformation deploy \
+          --template-file server-deployment/server.yaml \
+          --stack-name ${{ env.STACK_NAME }} \
+          --parameter-overrides \
+            InstanceType=t2.micro \
+            KeyName=AiHealth \
+            AMI=${{ secrets.AMI }} \
+            DBUsername=${{ secrets.DBUsername }} \
+            DBPassword=${{ secrets.DBPassword }} \
+            DBAllocatedStorage=20 \
+            DBInstanceClass=db.t3.micro \
+          --capabilities CAPABILITY_NAMED_IAM
+
+    - name: Delete CloudFormation stack
+      if: ${{ github.event.inputs.action == 'delete' }}
+      run: |
+        aws cloudformation delete-stack --stack-name ${{ env.STACK_NAME }}
 
     - name: Get EC2 instance public IP
-      if: github.event.inputs.action == 'create'
+      if: ${{ github.event.inputs.action == 'create' }}
       id: ec2-public-ip
       run: |
         INSTANCE_ID=$(aws cloudformation describe-stacks --stack-name ${{ env.STACK_NAME }} --query "Stacks[0].Outputs[?OutputKey=='InstanceId'].OutputValue" --output text)
@@ -68,19 +70,19 @@ jobs:
         echo "public_ip=${PUBLIC_IP}" >> $GITHUB_ENV
 
     - name: Wait for EC2 instance to be ready
-      if: github.event.inputs.action == 'create'
+      if: ${{ github.event.inputs.action == 'create' }}
       run: |
         sleep 60
 
     - name: Transfer files to EC2
-      if: github.event.inputs.action == 'create'
+      if: ${{ github.event.inputs.action == 'create' }}
       run: |
         rsync -avz --exclude='.github' . ec2-user@${{ env.public_ip }}:/home/ec2-user/ --rsync-path="mkdir -p /home/ec2-user/ && rsync"
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
     - name: SSH and deploy HTML files
-      if: github.event.inputs.action == 'create'
+      if: ${{ github.event.inputs.action == 'create' }}
       uses: appleboy/ssh-action@v0.1.7
       with:
         host: ${{ env.public_ip }}
