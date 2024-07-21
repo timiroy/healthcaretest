@@ -1,4 +1,3 @@
-
 function toggleMaximize() {
     const popup = document.getElementById('chatbot-popup');
     if (isMaximized) {
@@ -14,5 +13,3 @@ function toggleChatbot() {
     const popup = document.getElementById('chatbot-popup');
     popup.style.display = popup.style.display === 'none' ? 'flex' : 'none';
 }
-
-window.onload = fetchIPAddress;
