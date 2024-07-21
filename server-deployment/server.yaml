@@ -157,6 +157,10 @@ Resources:
           FromPort: 3306
           ToPort: 3306
           CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 8501
+          ToPort: 8501
+          CidrIp: 0.0.0.0/0      
 
   MyEC2Instance:
     Type: AWS::EC2::Instance
