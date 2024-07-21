@@ -129,7 +129,7 @@ jobs:
             sudo systemctl enable httpd
             sudo yum install -y python3        
             sudo yum install -y python3-pip
-            mkdir -p /home/ec2-user/app
+            sudo mkdir -p /home/ec2-user/app
             sudo mv /home/ec2-user/* /var/www/html/  
             sudo mv /home/ec2-user/chatbot/* /home/ec2-user/app/
             pip3 install -r /home/ec2-user/app/requirements.txt
