@@ -5,9 +5,6 @@ from langchain.chains import LLMChain
 from langchain_community.chat_models import BedrockChat  
 from langchain.prompts import PromptTemplate
 
-# Set AWS profile
-os.environ["AWS_PROFILE"] = "default"
-
 # Bedrock client
 bedrock_client = boto3.client(
     service_name="bedrock-runtime",

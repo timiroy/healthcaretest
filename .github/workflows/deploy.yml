@@ -21,7 +21,7 @@ env:
   AWS_REGION: us-east-1
   STACK_NAME: AIHealthServerCloudFormationStack
   INSTANCE_ID: MyEC2Instance
-  ACTION: create
+  ACTION: delete
   SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}  # Set SSH private key as an environment variable
 
 jobs:
@@ -134,4 +134,4 @@ jobs:
             sudo cp -r /home/ec2-user/chatbot/* /home/ec2-user/app/
             pip3 install -r /home/ec2-user/app/requirements.txt
             sudo systemctl restart httpd
-            python3 -m streamlit run /home/ec2-user/app/chatbot/main.py --server.port 8501 > streamlit.log 2>&1 &
+            streamlit run /home/ec2-user/app/main.py --server.port 8501 > streamlit.log 2>&1 &
