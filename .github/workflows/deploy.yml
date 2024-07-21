@@ -21,6 +21,7 @@ env:
   AWS_REGION: us-east-1
   STACK_NAME: AIHealthServerCloudFormationStack
   INSTANCE_ID: MyEC2Instance
+  ACTION: create
   SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}  # Set SSH private key as an environment variable
 
 jobs:
