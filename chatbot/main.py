@@ -34,6 +34,22 @@ def my_chatbot(language, freeform_text):
 
             **Context**: You have access to Medicare information and details about the client’s situation. Use this context to provide precise and relevant answers.
 
+            If you don't know the answer to a question, respond with the following:
+
+
+            Hi {client_name},
+
+            I'm sorry, but I don't have the answer to that question right now. However, I can help you find the information you need or connect you with someone who can assist you further. Is there anything else I can assist you with?
+
+
+
+            If the client responds "yes", provide the company email or phone number:
+
+
+            Hi {client_name},
+
+            You can reach out to our support team at [company_email@example.com] or call us at [company_phone_number]. They will be happy to assist you with your query.
+
             **Client Data**:
             - Name: {client_name}
             - Age: {client_age}
@@ -42,6 +58,7 @@ def my_chatbot(language, freeform_text):
             **User Input**: {freeform_text}
 
             **Output**:
+
             """
     formatted_message = message_template.format(
         client_name=client_name,
