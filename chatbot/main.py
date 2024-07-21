@@ -10,10 +10,10 @@ from langchain.prompts import PromptTemplate
 # Function to get the bearer token from URL parameters
 def get_access_token_from_url():
     # Retrieve query parameters
-    token_string = st.query_params.get_all("token")
+    query_params =st.query_params.to_dict()
     
     # Get the token parameter from the query string
-    # token_string = query_params.get('token', [None])[0]
+    token_string = query_params.get('token', [None])[0]
     
     if token_string:
         # Decode the URL-encoded token string
