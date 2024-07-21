@@ -67,6 +67,13 @@ jobs:
       run: |
         sleep 60
 
+    - name: Prepare SSH for rsync
+      if: ${{ env.ACTION == 'create' }}
+      run: |
+        mkdir -p ~/.ssh
+        echo -e "Host *\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
+        ssh-keyscan -H ${{ env.public_ip }} >> ~/.ssh/known_hosts
+
     - name: Transfer files to EC2
       if: ${{ env.ACTION == 'create' }}
       run: |
