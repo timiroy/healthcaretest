@@ -117,7 +117,7 @@ jobs:
             nohup python3 -m streamlit run /home/ec2-user/app/chatbot/main.py --server.port 8501 > streamlit.log 2>&1 &
 
 
-    - name: Run validation on non-main branches
-      if: github.ref != 'refs/heads/main'
-      run: echo "Running validation on branch: ${{ github.ref }}"
+    # - name: Run validation on non-main branches
+    #   if: github.ref != 'refs/heads/main'
+    #   run: echo "Running validation on branch: ${{ github.ref }}"
  
