@@ -217,6 +217,11 @@ Resources:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess
         - arn:aws:iam::aws:policy/AmazonBedrockFullAcces
+  AiHealthEC2InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - Ref: AiHealthEC2InstanceRole        
   AiHealthEC2Instance:
     Type: AWS::EC2::Instance
     Properties: 
