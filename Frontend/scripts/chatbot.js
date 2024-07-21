@@ -25,6 +25,6 @@ function setIframeToken() {
     const tokenString = encodeURIComponent(JSON.stringify(token));
 
     const iframe = document.getElementById('chatbot-frame');
-
+    console.log("Setting iframe src to:", url);
     iframe.src = `http://3.80.24.215:8501?token=${tokenString}`;
 }
