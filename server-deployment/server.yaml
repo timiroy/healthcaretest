@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: CloudFormation template to create a VPC, subnets, an EC2 instance with public IP, a security group, and a MySQL RDS instance.
+Description: CloudFormation template to create a VPC, subnets, an EC2 instance with public IP, security groups, and a MySQL RDS instance.
 
 Parameters:
   InstanceType:
@@ -61,7 +61,7 @@ Parameters:
     ConstraintDescription: Must be a valid RDS instance class.
 
 Resources:
-  MyVPC:
+  AiHealthVPC:
     Type: AWS::EC2::VPC
     Properties:
       CidrBlock: 10.0.0.0/16
@@ -69,77 +69,110 @@ Resources:
       EnableDnsHostnames: true
       Tags:
         - Key: Name
-          Value: MyVPC
+          Value: AiHealthVPC
 
-  MyInternetGateway:
+  AiHealthInternetGateway:
     Type: AWS::EC2::InternetGateway
     Properties:
       Tags:
         - Key: Name
-          Value: MyInternetGateway
+          Value: AiHealthInternetGateway
 
   AttachGateway:
     Type: AWS::EC2::VPCGatewayAttachment
     Properties:
       VpcId: 
-        Ref: MyVPC
+        Ref: AiHealthVPC
       InternetGatewayId: 
-        Ref: MyInternetGateway
+        Ref: AiHealthInternetGateway
 
-  MyPublicSubnet:
+  AiHealthPublicSubnet1:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: 
-        Ref: MyVPC
+        Ref: AiHealthVPC
       CidrBlock: 10.0.1.0/24
       MapPublicIpOnLaunch: true
+      AvailabilityZone: us-east-1a
       Tags:
         - Key: Name
-          Value: MyPublicSubnet
+          Value: AiHealthPublicSubnet1
 
-  MyPrivateSubnet:
+  AiHealthPublicSubnet2:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: 
-        Ref: MyVPC
-      CidrBlock: 10.0.2.0/24
+        Ref: AiHealthVPC
+      CidrBlock: 10.0.3.0/24
+      MapPublicIpOnLaunch: true
+      AvailabilityZone: us-east-1b
       Tags:
         - Key: Name
-          Value: MyPrivateSubnet
+          Value: AiHealthPublicSubnet2
 
-  MyRouteTable:
+  AiHealthPrivateSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: 
+        Ref: AiHealthVPC
+      CidrBlock: 10.0.2.0/24
+      AvailabilityZone: us-east-1a
+      Tags:
+        - Key: Name
+          Value: AiHealthPrivateSubnet1
+
+  AiHealthPrivateSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: 
+        Ref: AiHealthVPC
+      CidrBlock: 10.0.4.0/24
+      AvailabilityZone: us-east-1b
+      Tags:
+        - Key: Name
+          Value: AiHealthPrivateSubnet2
+
+  AiHealthRouteTable:
     Type: AWS::EC2::RouteTable
     Properties:
       VpcId: 
-        Ref: MyVPC
+        Ref: AiHealthVPC
       Tags:
         - Key: Name
-          Value: MyRouteTable
+          Value: AiHealthRouteTable
 
-  MyRoute:
+  AiHealthRoute:
     Type: AWS::EC2::Route
     DependsOn: AttachGateway
     Properties:
       RouteTableId: 
-        Ref: MyRouteTable
+        Ref: AiHealthRouteTable
       DestinationCidrBlock: 0.0.0.0/0
       GatewayId: 
-        Ref: MyInternetGateway
+        Ref: AiHealthInternetGateway
 
-  PublicSubnetRouteTableAssociation:
+  PublicSubnetRouteTableAssociation1:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
       SubnetId: 
-        Ref: MyPublicSubnet
+        Ref: AiHealthPublicSubnet1
       RouteTableId: 
-        Ref: MyRouteTable
+        Ref: AiHealthRouteTable
 
-  MySecurityGroup:
+  PublicSubnetRouteTableAssociation2:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: 
+        Ref: AiHealthPublicSubnet2
+      RouteTableId: 
+        Ref: AiHealthRouteTable
+
+  AiHealthEC2SecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties: 
-      GroupDescription: Enable SSH access via port 22 and MySQL access via port 3306
+      GroupDescription: Enable SSH access via port 22, HTTP via port 80, HTTPS via port 443, and custom port 8501
       VpcId: 
-        Ref: MyVPC
+        Ref: AiHealthVPC
       SecurityGroupIngress: 
         - IpProtocol: tcp
           FromPort: 22
@@ -154,15 +187,42 @@ Resources:
           ToPort: 443
           CidrIp: 0.0.0.0/0
         - IpProtocol: tcp
-          FromPort: 3306
-          ToPort: 3306
-          CidrIp: 0.0.0.0/0
-        - IpProtocol: tcp
           FromPort: 8501
           ToPort: 8501
-          CidrIp: 0.0.0.0/0      
+          CidrIp: 0.0.0.0/0
 
-  MyEC2Instance:
+  AiHealthRDSSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow MySQL access from EC2 security group
+      VpcId: 
+        Ref: AiHealthVPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 3306
+          ToPort: 3306
+          SourceSecurityGroupId: 
+            Ref: AiHealthEC2SecurityGroup
+  AiHealthEC2InstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: AiHealthEC2InstanceRole
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess
+        - arn:aws:iam::aws:policy/AmazonBedrockFullAccess
+  AiHealthEC2InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - Ref: AiHealthEC2InstanceRole        
+  AiHealthEC2Instance:
     Type: AWS::EC2::Instance
     Properties: 
       InstanceType: 
@@ -170,68 +230,80 @@ Resources:
       KeyName: 
         Ref: KeyName
       SecurityGroupIds: 
-        - Ref: MySecurityGroup
+        - Ref: AiHealthEC2SecurityGroup
+      IamInstanceProfile: 
+        Ref: AiHealthEC2InstanceProfile
       ImageId: 
         Ref: AMI
       SubnetId: 
-        Ref: MyPublicSubnet
+        Ref: AiHealthPublicSubnet1
       Tags:
         - Key: Name
-          Value: MyEC2Instance
+          Value: AiHealthEC2Instance
 
-  # MyRDSInstance:
-  #   Type: AWS::RDS::DBInstance
-  #   Properties: 
-  #     DBInstanceIdentifier: AiHealth
-  #     AllocatedStorage: 
-  #       Ref: DBAllocatedStorage
-  #     DBInstanceClass: 
-  #       Ref: DBInstanceClass
-  #     Engine: mysql
-  #     EngineVersion: 8.0.35
-  #     MasterUsername: 
-  #       Ref: DBUsername
-  #     MasterUserPassword: 
-  #       Ref: DBPassword
-  #     VPCSecurityGroups: 
-  #       - Ref: MySecurityGroup
-  #     DBSubnetGroupName: 
-  #       Ref: MyDBSubnetGroup
-  #     PubliclyAccessible: false
+  AiHealthRDSInstance:
+    Type: AWS::RDS::DBInstance
+    Properties: 
+      DBInstanceIdentifier: AiHealth
+      AllocatedStorage: 
+        Ref: DBAllocatedStorage
+      DBInstanceClass: 
+        Ref: DBInstanceClass
+      Engine: mysql
+      EngineVersion: 8.0.35
+      MasterUsername: 
+        Ref: DBUsername
+      MasterUserPassword: 
+        Ref: DBPassword
+      VPCSecurityGroups: 
+        - Ref: AiHealthRDSSecurityGroup
+      DBSubnetGroupName: 
+        Ref: AiHealthDBSubnetGroup
+      PubliclyAccessible: false
 
-  # MyDBSubnetGroup:
-  #   Type: AWS::RDS::DBSubnetGroup
-  #   Properties:
-  #     DBSubnetGroupDescription: Subnet group for RDS instance
-  #     SubnetIds: 
-  #       - Ref: MyPrivateSubnet
-  #       - Ref: MyPublicSubnet
-  #     DBSubnetGroupName: my-db-subnet-group
+  AiHealthDBSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: Subnet group for RDS instance
+      SubnetIds: 
+        - Ref: AiHealthPrivateSubnet1
+        - Ref: AiHealthPrivateSubnet2
+      DBSubnetGroupName: AiHealth-db-subnet-group
 
 Outputs:
   VPCId:
     Description: VPC ID
     Value: 
-      Ref: MyVPC
+      Ref: AiHealthVPC
 
-  PublicSubnetId:
-    Description: Public Subnet ID
+  PublicSubnetId1:
+    Description: Public Subnet ID in AZ us-east-1a
     Value: 
-      Ref: MyPublicSubnet
+      Ref: AiHealthPublicSubnet1
 
-  PrivateSubnetId:
-    Description: Private Subnet ID
+  PublicSubnetId2:
+    Description: Public Subnet ID in AZ us-east-1b
     Value: 
-      Ref: MyPrivateSubnet
+      Ref: AiHealthPublicSubnet2
+
+  PrivateSubnetId1:
+    Description: Private Subnet ID in AZ us-east-1a
+    Value: 
+      Ref: AiHealthPrivateSubnet1
+
+  PrivateSubnetId2:
+    Description: Private Subnet ID in AZ us-east-1b
+    Value: 
+      Ref: AiHealthPrivateSubnet2
 
   InstanceId:
     Description: Instance ID of the newly created EC2 instance
     Value: 
-      Ref: MyEC2Instance
+      Ref: AiHealthEC2Instance
 
-  # RDSEndpoint:
-  #   Description: Endpoint of the RDS instance
-  #   Value: 
-  #     Fn::GetAtt: 
-  #       - MyRDSInstance
-  #       - Endpoint.Address
+  RDSEndpoint:
+    Description: Endpoint of the RDS instance
+    Value: 
+      Fn::GetAtt: 
+        - AiHealthRDSInstance
+        - Endpoint.Address
