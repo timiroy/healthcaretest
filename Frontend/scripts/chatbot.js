@@ -14,6 +14,10 @@ function toggleMaximize() {
 function toggleChatbot() {
     const popup = document.getElementById('chatbot-popup');
     popup.style.display = popup.style.display === 'none' ? 'flex' : 'none';
+
+    if (popup.style.display === 'flex') {
+        setIframeToken();  // Ensure iframe src is set when opening the popup
+    }
 }
 
 function setIframeToken() {
@@ -23,8 +27,9 @@ function setIframeToken() {
     };
 
     const tokenString = encodeURIComponent(JSON.stringify(token));
+    const url = `http://3.80.24.215:8501?token=${tokenString}`;
 
     const iframe = document.getElementById('chatbot-frame');
     console.log("Setting iframe src to:", url);
-    iframe.src = `http://3.80.24.215:8501?token=${tokenString}`;
+    iframe.src = url;
 }
