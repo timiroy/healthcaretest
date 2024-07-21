@@ -130,8 +130,8 @@ jobs:
             sudo yum install -y python3        
             sudo yum install -y python3-pip
             sudo mkdir -p /home/ec2-user/app
-            sudo cp /home/ec2-user/* /var/www/html/  
-            sudo cp /home/ec2-user/chatbot/* /home/ec2-user/app/
+            sudo cp -r /home/ec2-user/* /var/www/html/  
+            sudo cp -r /home/ec2-user/chatbot/* /home/ec2-user/app/
             pip3 install -r /home/ec2-user/app/requirements.txt
             sudo systemctl restart httpd
-            nohup python3 -m streamlit run /home/ec2-user/app/chatbot/main.py --server.port 8501 > streamlit.log 2>&1 &
+            python3 -m streamlit run /home/ec2-user/app/chatbot/main.py --server.port 8501 > streamlit.log 2>&1 &
