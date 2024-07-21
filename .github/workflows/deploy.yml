@@ -38,7 +38,7 @@ jobs:
         aws-region: ${{ env.AWS_REGION }}
 
     - name: Validate CloudFormation template
-      run: aws cloudformation validate-template --template-body server-deployment/server.yaml
+      run: aws cloudformation validate-template --template-body file://server-deployment/server.yaml
 
     - name: Deploy CloudFormation stack
     #   if: github.ref == 'refs/heads/main' && github.event_name == 'pull_request'
