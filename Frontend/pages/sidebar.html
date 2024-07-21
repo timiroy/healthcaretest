@@ -132,13 +132,18 @@
 
     <div class="chatbot-popup" id="chatbot-popup">
       <header>
-          <h2>Chatbot</h2>
-          <div class="header-buttons">
-              <span class="maximize-btn" onclick="toggleMaximize()">🗖</span>
-              <span class="close-btn" onclick="toggleChatbot()">✖</span>
-          </div>
+        <h2>Chatbot</h2>
+        <div class="header-buttons">
+          <span class="maximize-btn" onclick="toggleMaximize()">🗖</span>
+          <span class="close-btn" onclick="toggleChatbot()">✖</span>
+        </div>
       </header>
-      <iframe id="chatbot-frame" width="100%" height="100%" frameborder="0"></iframe>
+      <iframe
+        src="http://localhost:8501"
+        width="100%"
+        height="100%"
+        frameborder="0"
+      ></iframe>
     </div>
     <button class="chatbot-toggle-btn" onclick="toggleChatbot()">Chat</button>
 
