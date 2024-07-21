@@ -64,7 +64,7 @@ jobs:
           --capabilities CAPABILITY_NAMED_IAM
 
     - name: Update CloudFormation stack
-      if: ${{ env.stack_exists != '' }}
+      if: ${{ env.stack_exists == env.STACK_NAME }}
       run: |
         aws cloudformation update-stack \
           --stack-name ${{ env.STACK_NAME }} \
