@@ -1,4 +1,5 @@
 langchain
+langchain_community
 streamlit
 boto3
 faiss-cpu

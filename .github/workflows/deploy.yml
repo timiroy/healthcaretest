@@ -1,0 +1,161 @@
+name: Deploy CloudFormation Stack and HTML
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - server-and-workflow-deployment
+
+env:
+  AWS_REGION: us-east-1
+  STACK_NAME: AIHealthServerCloudFormationStack
+  INSTANCE_ID: MyEC2Instance
+  ACTION: create
+  SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}  # Set SSH private key as an environment variable
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+
+    - name: Validate CloudFormation template
+      run: aws cloudformation validate-template --template-body file://server-deployment/server.yaml
+
+    - name: Check if CloudFormation stack exists
+      id: stack-check
+      run: |
+        STACK_EXISTS=$(aws cloudformation describe-stacks --stack-name ${{ env.STACK_NAME }} --query "Stacks[0].StackName" --output text 2>/dev/null || echo '')
+        echo "stack_exists=${STACK_EXISTS}" >> $GITHUB_ENV
+
+    - name: Create CloudFormation stack
+      if: ${{ env.stack_exists == '' && env.ACTION == 'create'}}
+      run: |
+          aws cloudformation deploy \
+            --template-file server-deployment/server.yaml \
+            --stack-name ${{ env.STACK_NAME }} \
+            --parameter-overrides \
+              InstanceType=t2.micro \
+              KeyName=AiHealth \
+              AMI=${{ secrets.AMI }} \
+              DBUsername=${{ secrets.DBUsername }} \
+              DBPassword=${{ secrets.DBPassword }} \
+              DBAllocatedStorage=20 \
+              DBInstanceClass=db.t3.micro \
+            --capabilities CAPABILITY_NAMED_IAM
+
+    - name: Update CloudFormation stack
+      if: ${{ env.stack_exists == env.STACK_NAME && env.ACTION == 'create' }}
+      run: |
+          echo "Updating CloudFormation stack..."
+          # Use 'set +e' to ignore the error and proceed to handle it manually
+          set +e
+          aws cloudformation update-stack \
+            --stack-name ${{ env.STACK_NAME }} \
+            --template-body file://server-deployment/server.yaml \
+            --parameters \
+              ParameterKey=InstanceType,ParameterValue=t2.micro \
+              ParameterKey=KeyName,ParameterValue=AiHealth \
+              ParameterKey=AMI,ParameterValue=${{ secrets.AMI }} \
+              ParameterKey=DBUsername,ParameterValue=${{ secrets.DBUsername }} \
+              ParameterKey=DBPassword,ParameterValue=${{ secrets.DBPassword }} \
+              ParameterKey=DBAllocatedStorage,ParameterValue=20 \
+              ParameterKey=DBInstanceClass,ParameterValue=db.t3.micro \
+            --capabilities CAPABILITY_NAMED_IAM
+          
+          if [ $? -ne 0 ]; then
+            echo "No updates are needed or an error occurred during the update."
+            # Optionally handle the error or take alternative actions
+          fi
+
+    - name: Get EC2 instance public IP
+      if: ${{ env.ACTION == 'create' }}
+      id: ec2-public-ip
+      run: |
+        INSTANCE_ID=$(aws cloudformation describe-stacks --stack-name ${{ env.STACK_NAME }} --query "Stacks[0].Outputs[?OutputKey=='InstanceId'].OutputValue" --output text)
+        PUBLIC_IP=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --query "Reservations[0].Instances[0].PublicIpAddress" --output text)
+        echo "::set-output name=public_ip::$PUBLIC_IP"
+
+    - name: Prepare SSH for rsync
+      if: ${{ env.ACTION == 'create' }}
+      run: |
+          mkdir -p ~/.ssh
+          echo -e "Host *\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
+          echo "${{ env.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ steps.ec2-public-ip.outputs.public_ip }} >> ~/.ssh/known_hosts
+  
+    - name: Test SSH Connection
+      if: ${{ env.ACTION == 'create' }}
+      run: |
+        ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ec2-user@${{ steps.ec2-public-ip.outputs.public_ip }} "echo 'SSH connection successful'"
+
+    - name: Transfer files to EC2
+      if: ${{ env.ACTION == 'create' }}
+      run: |
+        rsync -avz -e "ssh -i ~/.ssh/id_rsa" --exclude='.github' . ec2-user@${{ steps.ec2-public-ip.outputs.public_ip }}:/home/ec2-user/ --rsync-path="mkdir -p /home/ec2-user/ && rsync"
+
+    - name: SSH and deploy HTML files
+      if: ${{ env.ACTION == 'create' }}
+      uses: appleboy/ssh-action@v0.1.7
+      with:
+        host: ${{ steps.ec2-public-ip.outputs.public_ip }}
+        username: ec2-user
+        key: ${{ env.SSH_PRIVATE_KEY }}
+        script: |
+            sudo yum update -y
+            sudo yum install -y httpd
+            sudo systemctl start httpd
+            sudo systemctl enable httpd
+            sudo yum install -y python3        
+            sudo yum install -y python3-pip
+            sudo mkdir -p /home/ec2-user/app
+            sudo cp -r /home/ec2-user/* /var/www/html/  
+            sudo cp -r /home/ec2-user/chatbot/* /home/ec2-user/app/
+            pip3 install -r /home/ec2-user/app/requirements.txt
+            sudo systemctl restart httpd
+            streamlit run /home/ec2-user/app/main.py --server.port 8501 > streamlit.log 2>&1 &
+
+    - name: Delete CloudFormation stack
+      if: ${{ env.ACTION == 'delete' }}
+      run: |
+              # Check if the stack exists
+              STACK_EXISTS=$(aws cloudformation describe-stacks --stack-name ${{ env.STACK_NAME }} --query "Stacks[0].StackName" --output text 2>/dev/null || true)
+              
+              if [ "$STACK_EXISTS" == "${{ env.STACK_NAME }}" ]; then
+                echo "Stack ${{ env.STACK_NAME }} exists. Proceeding with deletion."
+          
+                # Delete the stack
+                aws cloudformation delete-stack --stack-name ${{ env.STACK_NAME }}
+          
+                # Wait for the stack to be deleted
+                while true; do
+                  # Check the stack status
+                  STACK_STATUS=$(aws cloudformation describe-stacks --stack-name ${{ env.STACK_NAME }} --query "Stacks[0].StackStatus" --output text 2>/dev/null || true)
+                  
+                  if [ "$STACK_STATUS" == "" ]; then
+                    echo "Stack ${{ env.STACK_NAME }} has been deleted."
+                    break
+                  elif [[ "$STACK_STATUS" == *"DELETE"* ]]; then
+                    echo "Stack ${{ env.STACK_NAME }} is still being deleted. Waiting..."
+                  else
+                    echo "Unexpected stack status: $STACK_STATUS"
+                  fi
+                  
+                  # Wait for a short period before checking again
+                  sleep 30
+                done
+              else
+                echo "Stack ${{ env.STACK_NAME }} does not exist. Skipping deletion."
+              fi

@@ -1,0 +1,237 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: CloudFormation template to create a VPC, subnets, an EC2 instance with public IP, a security group, and a MySQL RDS instance.
+
+Parameters:
+  InstanceType:
+    Description: EC2 instance type
+    Type: String
+    Default: t2.micro
+    AllowedValues:
+      - t2.micro
+      - t2.small
+      - t2.medium
+      - t3.micro
+      - t3.small
+      - t3.medium
+    ConstraintDescription: Must be a valid EC2 instance type.
+
+  KeyName:
+    Description: Name of an existing EC2 KeyPair to enable SSH access to the instance
+    Type: AWS::EC2::KeyPair::KeyName
+    ConstraintDescription: Must be the name of an existing EC2 KeyPair.
+
+  AMI:
+    Description: AMI ID for the EC2 instance
+    Type: AWS::EC2::Image::Id
+    ConstraintDescription: Must be a valid AMI ID.
+
+  DBUsername:
+    Description: The database admin account username
+    Type: String
+    NoEcho: true
+
+  DBPassword:
+    Description: The database admin account password
+    Type: String
+    NoEcho: true
+    MinLength: 8
+    MaxLength: 41
+    AllowedPattern: '[a-zA-Z0-9]*'
+    ConstraintDescription: Must consist of alphanumeric characters only and be between 8 and 41 characters in length.
+
+  DBAllocatedStorage:
+    Description: The allocated storage size for the RDS instance (in GB)
+    Type: Number
+    Default: 20
+    MinValue: 5
+    MaxValue: 1000
+    ConstraintDescription: Must be between 5 and 1000 GB.
+
+  DBInstanceClass:
+    Description: The compute and memory capacity of the RDS instance
+    Type: String
+    Default: db.t2.micro
+    AllowedValues:
+      - db.t2.micro
+      - db.t2.small
+      - db.t2.medium
+      - db.t3.micro
+      - db.t3.small
+      - db.t3.medium
+    ConstraintDescription: Must be a valid RDS instance class.
+
+Resources:
+  MyVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: MyVPC
+
+  MyInternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: MyInternetGateway
+
+  AttachGateway:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: 
+        Ref: MyVPC
+      InternetGatewayId: 
+        Ref: MyInternetGateway
+
+  MyPublicSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: 
+        Ref: MyVPC
+      CidrBlock: 10.0.1.0/24
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: MyPublicSubnet
+
+  MyPrivateSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: 
+        Ref: MyVPC
+      CidrBlock: 10.0.2.0/24
+      Tags:
+        - Key: Name
+          Value: MyPrivateSubnet
+
+  MyRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: 
+        Ref: MyVPC
+      Tags:
+        - Key: Name
+          Value: MyRouteTable
+
+  MyRoute:
+    Type: AWS::EC2::Route
+    DependsOn: AttachGateway
+    Properties:
+      RouteTableId: 
+        Ref: MyRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: 
+        Ref: MyInternetGateway
+
+  PublicSubnetRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: 
+        Ref: MyPublicSubnet
+      RouteTableId: 
+        Ref: MyRouteTable
+
+  MySecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties: 
+      GroupDescription: Enable SSH access via port 22 and MySQL access via port 3306
+      VpcId: 
+        Ref: MyVPC
+      SecurityGroupIngress: 
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 3306
+          ToPort: 3306
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 8501
+          ToPort: 8501
+          CidrIp: 0.0.0.0/0      
+
+  MyEC2Instance:
+    Type: AWS::EC2::Instance
+    Properties: 
+      InstanceType: 
+        Ref: InstanceType
+      KeyName: 
+        Ref: KeyName
+      SecurityGroupIds: 
+        - Ref: MySecurityGroup
+      ImageId: 
+        Ref: AMI
+      SubnetId: 
+        Ref: MyPublicSubnet
+      Tags:
+        - Key: Name
+          Value: MyEC2Instance
+
+  # MyRDSInstance:
+  #   Type: AWS::RDS::DBInstance
+  #   Properties: 
+  #     DBInstanceIdentifier: AiHealth
+  #     AllocatedStorage: 
+  #       Ref: DBAllocatedStorage
+  #     DBInstanceClass: 
+  #       Ref: DBInstanceClass
+  #     Engine: mysql
+  #     EngineVersion: 8.0.35
+  #     MasterUsername: 
+  #       Ref: DBUsername
+  #     MasterUserPassword: 
+  #       Ref: DBPassword
+  #     VPCSecurityGroups: 
+  #       - Ref: MySecurityGroup
+  #     DBSubnetGroupName: 
+  #       Ref: MyDBSubnetGroup
+  #     PubliclyAccessible: false
+
+  # MyDBSubnetGroup:
+  #   Type: AWS::RDS::DBSubnetGroup
+  #   Properties:
+  #     DBSubnetGroupDescription: Subnet group for RDS instance
+  #     SubnetIds: 
+  #       - Ref: MyPrivateSubnet
+  #       - Ref: MyPublicSubnet
+  #     DBSubnetGroupName: my-db-subnet-group
+
+Outputs:
+  VPCId:
+    Description: VPC ID
+    Value: 
+      Ref: MyVPC
+
+  PublicSubnetId:
+    Description: Public Subnet ID
+    Value: 
+      Ref: MyPublicSubnet
+
+  PrivateSubnetId:
+    Description: Private Subnet ID
+    Value: 
+      Ref: MyPrivateSubnet
+
+  InstanceId:
+    Description: Instance ID of the newly created EC2 instance
+    Value: 
+      Ref: MyEC2Instance
+
+  # RDSEndpoint:
+  #   Description: Endpoint of the RDS instance
+  #   Value: 
+  #     Fn::GetAtt: 
+  #       - MyRDSInstance
+  #       - Endpoint.Address
