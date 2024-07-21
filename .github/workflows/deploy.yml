@@ -21,7 +21,7 @@ env:
   AWS_REGION: us-east-1
   STACK_NAME: AIHealthServerCloudFormationStack
   INSTANCE_ID: MyEC2Instance
-  ACTION: ${{ github.event.inputs.action }}
+  ACTIONs: ${{ github.event.inputs.action }}
   SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}  # Set SSH private key as an environment variable
 
 jobs:
@@ -38,7 +38,9 @@ jobs:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ env.AWS_REGION }}
-
+    - name: Echo ACTION input
+      run: |
+          echo "ACTIONs: ${{ github.event.inputs.action }}"
     - name: Validate CloudFormation template
       run: aws cloudformation validate-template --template-body file://server-deployment/server.yaml
 
