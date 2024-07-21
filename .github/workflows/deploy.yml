@@ -127,24 +127,11 @@ jobs:
             sudo yum install -y httpd
             sudo systemctl start httpd
             sudo systemctl enable httpd
-  
-            # Install Python
-            sudo yum install -y python3
-            
-            # Install pip if not already installed
+            sudo yum install -y python3        
             sudo yum install -y python3-pip
-  
-            # Create a directory for your application if it doesn't exist
             mkdir -p /home/ec2-user/app
-            
-            # Move files and folders
             sudo mv /home/ec2-user/* /var/www/html/  
             sudo mv /home/ec2-user/chatbot/* /home/ec2-user/app/
-  
-            # Install required Python packages
             pip3 install -r /home/ec2-user/app/requirements.txt
-
-            # (Optional) Restart HTTP server if needed
             sudo systemctl restart httpd
-
             nohup python3 -m streamlit run /home/ec2-user/app/chatbot/main.py --server.port 8501 > streamlit.log 2>&1 &
