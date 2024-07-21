@@ -44,11 +44,11 @@ jobs:
     - name: Check if CloudFormation stack exists
       id: stack-check
       run: |
-        STACK_EXISTS=$(aws cloudformation describe-stacks --stack-name ${{ env.STACK_NAME }} --query "Stacks[0].StackName" --output text 2>/dev/null || echo "")
+        STACK_EXISTS=$(aws cloudformation describe-stacks --stack-name ${{ env.STACK_NAME }} --query "Stacks[0].StackName" --output text 2>/dev/null || echo '')
         echo "stack_exists=${STACK_EXISTS}" >> $GITHUB_ENV
 
     - name: Create CloudFormation stack
-      if: ${{ env.stack_exists == '' && env.ACTION == 'create' }}
+      if: ${{ env.stack_exists == ''}}
       run: |
         aws cloudformation create-stack \
           --stack-name ${{ env.STACK_NAME }} \
@@ -64,7 +64,7 @@ jobs:
           --capabilities CAPABILITY_NAMED_IAM
 
     - name: Update CloudFormation stack
-      if: ${{ env.stack_exists != '' && env.ACTION == 'create' }}
+      if: ${{ env.stack_exists != '' }}
       run: |
         aws cloudformation update-stack \
           --stack-name ${{ env.STACK_NAME }} \
