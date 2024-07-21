@@ -49,7 +49,7 @@ jobs:
         echo "stack_exists=${STACK_EXISTS}" >> $GITHUB_ENV
 
     - name: Create CloudFormation stack
-      if: ${{ env.stack_exists == ''}}
+      if: ${{ env.stack_exists == '' && env.ACTION == 'create'}}
       run: |
           aws cloudformation deploy \
             --template-file server-deployment/server.yaml \
@@ -65,7 +65,7 @@ jobs:
             --capabilities CAPABILITY_NAMED_IAM
 
     - name: Update CloudFormation stack
-      if: ${{ env.stack_exists == env.STACK_NAME }}
+      if: ${{ env.stack_exists == env.STACK_NAME && env.ACTION == 'create' }}
       run: |
           echo "Updating CloudFormation stack..."
           # Use 'set +e' to ignore the error and proceed to handle it manually
@@ -134,4 +134,9 @@ jobs:
             sudo cp -r /home/ec2-user/chatbot/* /home/ec2-user/app/
             pip3 install -r /home/ec2-user/app/requirements.txt
             sudo systemctl restart httpd
-            streamlit run /home/ec2-user/app/main.py --server.port 8501 > streamlit.log 2>&1 &
+            streamlit run /home/ec2-user/app/main.py --server.port 8501 > streamlit.log 2>&1 &\
+            
+    - name: Delete CloudFormation stack
+      if: ${{ env.ACTION == 'delete' }}
+      run: |
+        aws cloudformation delete-stack --stack-name ${{ env.STACK_NAME }}
