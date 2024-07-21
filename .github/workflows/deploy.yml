@@ -28,7 +28,7 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v2
@@ -41,9 +41,8 @@ jobs:
       run: aws cloudformation validate-template --template-body file://server-deployment/server.yaml
 
     - name: Deploy CloudFormation stack
-    #   if: github.ref == 'refs/heads/main' && github.event_name == 'pull_request'
       run: |
-        if [ ${{ github.event.inputs.action }} == 'create' ]; then
+        if [ "${{ github.event.inputs.action }}" == 'create' ]; then
           aws cloudformation deploy \
             --template-file server-deployment/server.yaml \
             --stack-name ${{ env.STACK_NAME }} \
@@ -56,37 +55,35 @@ jobs:
               DBAllocatedStorage=20 \
               DBInstanceClass=db.t3.micro \
             --capabilities CAPABILITY_NAMED_IAM
-        elif [ ${{ github.event.inputs.action }} == 'delete' ]; then
+        elif [ "${{ github.event.inputs.action }}" == 'delete' ]; then
           aws cloudformation delete-stack --stack-name ${{ env.STACK_NAME }}
         fi
 
     - name: Get EC2 instance public IP
-    #   if: github.ref == 'refs/heads/main' && github.event_name == 'pull_request' && github.event.inputs.action == 'create'
-      if:  github.event.inputs.action == 'create'
+      if: github.event.inputs.action == 'create'
       id: ec2-public-ip
       run: |
         INSTANCE_ID=$(aws cloudformation describe-stacks --stack-name ${{ env.STACK_NAME }} --query "Stacks[0].Outputs[?OutputKey=='InstanceId'].OutputValue" --output text)
         PUBLIC_IP=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --query "Reservations[0].Instances[0].PublicIpAddress" --output text)
-        echo "::set-output name=public_ip::$PUBLIC_IP"
+        echo "public_ip=${PUBLIC_IP}" >> $GITHUB_ENV
 
     - name: Wait for EC2 instance to be ready
-    #   if: github.ref == 'refs/heads/main' && github.event_name == 'pull_request' && github.event.inputs.action == 'create'
-      if:  github.event.inputs.action == 'create'
+      if: github.event.inputs.action == 'create'
       run: |
         sleep 60
 
     - name: Transfer files to EC2
+      if: github.event.inputs.action == 'create'
       run: |
-        rsync -avz --exclude='.github' . ec2-user@${{ steps.ec2-public-ip.outputs.public_ip }}:/home/ec2-user/ --rsync-path="mkdir -p /home/ec2-user/ && rsync"
+        rsync -avz --exclude='.github' . ec2-user@${{ env.public_ip }}:/home/ec2-user/ --rsync-path="mkdir -p /home/ec2-user/ && rsync"
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-  
+
     - name: SSH and deploy HTML files
-    #   if: github.ref == 'refs/heads/main' && github.event_name == 'pull_request' && github.event.inputs.action == 'create'
-      if:  github.event.inputs.action == 'create'
-      uses: appleboy/ssh-action@v0.1.5
+      if: github.event.inputs.action == 'create'
+      uses: appleboy/ssh-action@v0.1.7
       with:
-        host: ${{ steps.ec2-public-ip.outputs.public_ip }}
+        host: ${{ env.public_ip }}
         username: ec2-user
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |            
@@ -115,9 +112,3 @@ jobs:
             sudo systemctl restart httpd
 
             nohup python3 -m streamlit run /home/ec2-user/app/chatbot/main.py --server.port 8501 > streamlit.log 2>&1 &
-
-
-    # - name: Run validation on non-main branches
-    #   if: github.ref != 'refs/heads/main'
-    #   run: echo "Running validation on branch: ${{ github.ref }}"
- 
