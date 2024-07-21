@@ -69,7 +69,7 @@ jobs:
         aws cloudformation update-stack \
           --stack-name ${{ env.STACK_NAME }} \
           --template-body server-deployment/server.yaml \
-          --parameter-overrides \
+          --parameters \
               InstanceType=t2.micro \
               KeyName=AiHealth \
               AMI=${{ secrets.AMI }} \
