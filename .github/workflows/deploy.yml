@@ -67,9 +67,9 @@ jobs:
       if: ${{ env.stack_exists == env.STACK_NAME }}
       run: |
         aws cloudformation update-stack \
-          --stack-name ${{ env.STACK_NAME }} \
-          --template-body server-deployment/server.yaml \
-          --parameters \
+        --stack-name ${{ env.STACK_NAME }} \
+        --template-body file://server-deployment/server.yaml \
+        --parameters \
             ParameterKey=InstanceType,ParameterValue=t2.micro \
             ParameterKey=KeyName,ParameterValue=AiHealth \
             ParameterKey=AMI,ParameterValue=${{ secrets.AMI }} \
@@ -77,7 +77,7 @@ jobs:
             ParameterKey=DBPassword,ParameterValue=${{ secrets.DBPassword }} \
             ParameterKey=DBAllocatedStorage,ParameterValue=20 \
             ParameterKey=DBInstanceClass,ParameterValue=db.t3.micro \
-          --capabilities CAPABILITY_NAMED_IAM
+        --capabilities CAPABILITY_NAMED_IAM
 
     - name: Get EC2 instance public IP
       if: ${{ env.ACTION == 'create' }}
