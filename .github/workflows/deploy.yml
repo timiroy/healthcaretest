@@ -65,7 +65,24 @@ jobs:
     - name: Wait for EC2 instance to be ready
       if: ${{ env.ACTION == 'create' }}
       run: |
-        sleep 60
+          INSTANCE_ID=$(aws cloudformation describe-stacks --stack-name ${{ env.STACK_NAME }} --query "Stacks[0].Outputs[?OutputKey=='InstanceId'].OutputValue" --output text)
+          echo "Waiting for EC2 instance to become healthy..."
+          while true; do
+            # Check instance state
+            STATUS=$(aws ec2 describe-instance-status --instance-ids $INSTANCE_ID --query "InstanceStatuses[0].InstanceState.Name" --output text)
+            
+            # Check health checks
+            INSTANCE_HEALTH=$(aws ec2 describe-instance-status --instance-ids $INSTANCE_ID --query "InstanceStatuses[0].InstanceStatus.Status" --output text)
+            SYSTEM_HEALTH=$(aws ec2 describe-instance-status --instance-ids $INSTANCE_ID --query "InstanceStatuses[0].SystemStatus.Status" --output text)
+  
+            if [ "$STATUS" == "running" ] && [ "$INSTANCE_HEALTH" == "ok" ] && [ "$SYSTEM_HEALTH" == "ok" ]; then
+              echo "EC2 instance is running and healthy."
+              break
+            else
+              echo "Instance state: $STATUS, Instance health: $INSTANCE_HEALTH, System health: $SYSTEM_HEALTH. Waiting..."
+              sleep 30
+            fi
+          done
 
     - name: Prepare SSH for rsync
       if: ${{ env.ACTION == 'create' }}
