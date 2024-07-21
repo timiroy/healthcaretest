@@ -50,7 +50,7 @@ Parameters:
   DBInstanceClass:
     Description: The compute and memory capacity of the RDS instance
     Type: String
-    Default: db.t3.micro
+    Default: db.t2.micro
     AllowedValues:
       - db.t2.micro
       - db.t2.small
@@ -86,26 +86,51 @@ Resources:
       InternetGatewayId: 
         Ref: AiHealthInternetGateway
 
-  AiHealthPublicSubnet:
+  AiHealthPublicSubnet1:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: 
         Ref: AiHealthVPC
       CidrBlock: 10.0.1.0/24
       MapPublicIpOnLaunch: true
+      AvailabilityZone: us-east-1a
       Tags:
         - Key: Name
-          Value: AiHealthPublicSubnet
+          Value: AiHealthPublicSubnet1
 
-  AiHealthPrivateSubnet:
+  AiHealthPublicSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: 
+        Ref: AiHealthVPC
+      CidrBlock: 10.0.3.0/24
+      MapPublicIpOnLaunch: true
+      AvailabilityZone: us-east-1b
+      Tags:
+        - Key: Name
+          Value: AiHealthPublicSubnet2
+
+  AiHealthPrivateSubnet1:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: 
         Ref: AiHealthVPC
       CidrBlock: 10.0.2.0/24
+      AvailabilityZone: us-east-1a
       Tags:
         - Key: Name
-          Value: AiHealthPrivateSubnet
+          Value: AiHealthPrivateSubnet1
+
+  AiHealthPrivateSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: 
+        Ref: AiHealthVPC
+      CidrBlock: 10.0.4.0/24
+      AvailabilityZone: us-east-1b
+      Tags:
+        - Key: Name
+          Value: AiHealthPrivateSubnet2
 
   AiHealthRouteTable:
     Type: AWS::EC2::RouteTable
@@ -126,11 +151,19 @@ Resources:
       GatewayId: 
         Ref: AiHealthInternetGateway
 
-  PublicSubnetRouteTableAssociation:
+  PublicSubnetRouteTableAssociation1:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
       SubnetId: 
-        Ref: AiHealthPublicSubnet
+        Ref: AiHealthPublicSubnet1
+      RouteTableId: 
+        Ref: AiHealthRouteTable
+
+  PublicSubnetRouteTableAssociation2:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: 
+        Ref: AiHealthPublicSubnet2
       RouteTableId: 
         Ref: AiHealthRouteTable
 
@@ -170,7 +203,20 @@ Resources:
           ToPort: 3306
           SourceSecurityGroupId: 
             Ref: AiHealthEC2SecurityGroup
-
+  AiHealthEC2InstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: AiHealthEC2InstanceRole
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess
+        - arn:aws:iam::aws:policy/AmazonBedrockFullAcces
   AiHealthEC2Instance:
     Type: AWS::EC2::Instance
     Properties: 
@@ -180,10 +226,12 @@ Resources:
         Ref: KeyName
       SecurityGroupIds: 
         - Ref: AiHealthEC2SecurityGroup
+      IamInstanceProfile: 
+        Ref: AiHealthEC2InstanceProfile
       ImageId: 
         Ref: AMI
       SubnetId: 
-        Ref: AiHealthPublicSubnet
+        Ref: AiHealthPublicSubnet1
       Tags:
         - Key: Name
           Value: AiHealthEC2Instance
@@ -213,8 +261,8 @@ Resources:
     Properties:
       DBSubnetGroupDescription: Subnet group for RDS instance
       SubnetIds: 
-        - Ref: AiHealthPrivateSubnet
-        - Ref: AiHealthPublicSubnet
+        - Ref: AiHealthPrivateSubnet1
+        - Ref: AiHealthPrivateSubnet2
       DBSubnetGroupName: AiHealth-db-subnet-group
 
 Outputs:
@@ -223,15 +271,25 @@ Outputs:
     Value: 
       Ref: AiHealthVPC
 
-  PublicSubnetId:
-    Description: Public Subnet ID
+  PublicSubnetId1:
+    Description: Public Subnet ID in AZ us-east-1a
     Value: 
-      Ref: AiHealthPublicSubnet
+      Ref: AiHealthPublicSubnet1
 
-  PrivateSubnetId:
-    Description: Private Subnet ID
+  PublicSubnetId2:
+    Description: Public Subnet ID in AZ us-east-1b
     Value: 
-      Ref: AiHealthPrivateSubnet
+      Ref: AiHealthPublicSubnet2
+
+  PrivateSubnetId1:
+    Description: Private Subnet ID in AZ us-east-1a
+    Value: 
+      Ref: AiHealthPrivateSubnet1
+
+  PrivateSubnetId2:
+    Description: Private Subnet ID in AZ us-east-1b
+    Value: 
+      Ref: AiHealthPrivateSubnet2
 
   InstanceId:
     Description: Instance ID of the newly created EC2 instance
