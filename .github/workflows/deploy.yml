@@ -70,13 +70,13 @@ jobs:
           --stack-name ${{ env.STACK_NAME }} \
           --template-body server-deployment/server.yaml \
           --parameters \
-              InstanceType=t2.micro \
-              KeyName=AiHealth \
-              AMI=${{ secrets.AMI }} \
-              DBUsername=${{ secrets.DBUsername }} \
-              DBPassword=${{ secrets.DBPassword }} \
-              DBAllocatedStorage=20 \
-              DBInstanceClass=db.t3.micro \
+            ParameterKey=InstanceType,ParameterValue=t2.micro \
+            ParameterKey=KeyName,ParameterValue=AiHealth \
+            ParameterKey=AMI,ParameterValue=${{ secrets.AMI }} \
+            ParameterKey=DBUsername,ParameterValue=${{ secrets.DBUsername }} \
+            ParameterKey=DBPassword,ParameterValue=${{ secrets.DBPassword }} \
+            ParameterKey=DBAllocatedStorage,ParameterValue=20 \
+            ParameterKey=DBInstanceClass,ParameterValue=db.t3.micro \
           --capabilities CAPABILITY_NAMED_IAM
 
     - name: Get EC2 instance public IP
