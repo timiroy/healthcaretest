@@ -67,18 +67,26 @@ jobs:
     - name: Update CloudFormation stack
       if: ${{ env.stack_exists == env.STACK_NAME }}
       run: |
-        aws cloudformation update-stack \
-        --stack-name ${{ env.STACK_NAME }} \
-        --template-body file://server-deployment/server.yaml \
-        --parameters \
-            ParameterKey=InstanceType,ParameterValue=t2.micro \
-            ParameterKey=KeyName,ParameterValue=AiHealth \
-            ParameterKey=AMI,ParameterValue=${{ secrets.AMI }} \
-            ParameterKey=DBUsername,ParameterValue=${{ secrets.DBUsername }} \
-            ParameterKey=DBPassword,ParameterValue=${{ secrets.DBPassword }} \
-            ParameterKey=DBAllocatedStorage,ParameterValue=20 \
-            ParameterKey=DBInstanceClass,ParameterValue=db.t3.micro \
-        --capabilities CAPABILITY_NAMED_IAM
+          echo "Updating CloudFormation stack..."
+          # Use 'set +e' to ignore the error and proceed to handle it manually
+          set +e
+          aws cloudformation update-stack \
+            --stack-name ${{ env.STACK_NAME }} \
+            --template-body file://server-deployment/server.yaml \
+            --parameters \
+              ParameterKey=InstanceType,ParameterValue=t2.micro \
+              ParameterKey=KeyName,ParameterValue=AiHealth \
+              ParameterKey=AMI,ParameterValue=${{ secrets.AMI }} \
+              ParameterKey=DBUsername,ParameterValue=${{ secrets.DBUsername }} \
+              ParameterKey=DBPassword,ParameterValue=${{ secrets.DBPassword }} \
+              ParameterKey=DBAllocatedStorage,ParameterValue=20 \
+              ParameterKey=DBInstanceClass,ParameterValue=db.t3.micro \
+            --capabilities CAPABILITY_NAMED_IAM
+          
+          if [ $? -ne 0 ]; then
+            echo "No updates are needed or an error occurred during the update."
+            # Optionally handle the error or take alternative actions
+          fi
 
     - name: Get EC2 instance public IP
       if: ${{ env.ACTION == 'create' }}
