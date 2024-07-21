@@ -216,7 +216,7 @@ Resources:
             Action: sts:AssumeRole
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess
-        - arn:aws:iam::aws:policy/AmazonBedrockFullAcces
+        - arn:aws:iam::aws:policy/AmazonBedrockFullAccess
   AiHealthEC2InstanceProfile:
     Type: AWS::IAM::InstanceProfile
     Properties:

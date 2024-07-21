@@ -78,6 +78,23 @@ jobs:
             echo "No updates are needed or an error occurred during the update."
             # Optionally handle the error or take alternative actions
           fi
+          
+    - name: Wait for EC2 instance to be ready
+      if: ${{ env.ACTION == 'create' }}
+      run: |
+            while true; do
+              INSTANCE_ID=$(aws cloudformation describe-stacks --stack-name ${{ env.STACK_NAME }} --query "Stacks[0].Outputs[?OutputKey=='InstanceId'].OutputValue" --output text)
+              STATUS=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --query "Reservations[0].Instances[0].State.Name" --output text)
+              if [ "$STATUS" == "running" ]; then
+                HEALTH=$(aws ec2 describe-instance-status --instance-ids $INSTANCE_ID --query "InstanceStatuses[0].InstanceStatus.Status" --output text)
+                if [ "$HEALTH" == "ok" ]; then
+                  echo "Instance is healthy."
+                  break
+                fi
+              fi
+              echo "Waiting for instance to be ready..."
+              sleep 30
+            done
 
     - name: Get EC2 instance public IP
       if: ${{ env.ACTION == 'create' }}
