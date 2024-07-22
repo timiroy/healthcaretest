@@ -191,18 +191,18 @@ Resources:
           ToPort: 8501
           CidrIp: 0.0.0.0/0
 
-  AiHealthRDSSecurityGroup:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupDescription: Allow MySQL access from EC2 security group
-      VpcId: 
-        Ref: AiHealthVPC
-      SecurityGroupIngress:
-        - IpProtocol: tcp
-          FromPort: 3306
-          ToPort: 3306
-          SourceSecurityGroupId: 
-            Ref: AiHealthEC2SecurityGroup
+  # AiHealthRDSSecurityGroup:
+  #   Type: AWS::EC2::SecurityGroup
+  #   Properties:
+  #     GroupDescription: Allow MySQL access from EC2 security group
+  #     VpcId: 
+  #       Ref: AiHealthVPC
+  #     SecurityGroupIngress:
+  #       - IpProtocol: tcp
+  #         FromPort: 3306
+  #         ToPort: 3306
+  #         SourceSecurityGroupId: 
+  #           Ref: AiHealthEC2SecurityGroup
   AiHealthEC2InstanceRole:
     Type: AWS::IAM::Role
     Properties:
@@ -241,34 +241,34 @@ Resources:
         - Key: Name
           Value: AiHealthEC2Instance
 
-  AiHealthRDSInstance:
-    Type: AWS::RDS::DBInstance
-    Properties: 
-      DBInstanceIdentifier: AiHealth
-      AllocatedStorage: 
-        Ref: DBAllocatedStorage
-      DBInstanceClass: 
-        Ref: DBInstanceClass
-      Engine: mysql
-      EngineVersion: 8.0.35
-      MasterUsername: 
-        Ref: DBUsername
-      MasterUserPassword: 
-        Ref: DBPassword
-      VPCSecurityGroups: 
-        - Ref: AiHealthRDSSecurityGroup
-      DBSubnetGroupName: 
-        Ref: AiHealthDBSubnetGroup
-      PubliclyAccessible: false
+  # AiHealthRDSInstance:
+  #   Type: AWS::RDS::DBInstance
+  #   Properties: 
+  #     DBInstanceIdentifier: AiHealth
+  #     AllocatedStorage: 
+  #       Ref: DBAllocatedStorage
+  #     DBInstanceClass: 
+  #       Ref: DBInstanceClass
+  #     Engine: mysql
+  #     EngineVersion: 8.0.35
+  #     MasterUsername: 
+  #       Ref: DBUsername
+  #     MasterUserPassword: 
+  #       Ref: DBPassword
+  #     VPCSecurityGroups: 
+  #       - Ref: AiHealthRDSSecurityGroup
+  #     DBSubnetGroupName: 
+  #       Ref: AiHealthDBSubnetGroup
+  #     PubliclyAccessible: false
 
-  AiHealthDBSubnetGroup:
-    Type: AWS::RDS::DBSubnetGroup
-    Properties:
-      DBSubnetGroupDescription: Subnet group for RDS instance
-      SubnetIds: 
-        - Ref: AiHealthPrivateSubnet1
-        - Ref: AiHealthPrivateSubnet2
-      DBSubnetGroupName: AiHealth-db-subnet-group
+  # AiHealthDBSubnetGroup:
+  #   Type: AWS::RDS::DBSubnetGroup
+  #   Properties:
+  #     DBSubnetGroupDescription: Subnet group for RDS instance
+  #     SubnetIds: 
+  #       - Ref: AiHealthPrivateSubnet1
+  #       - Ref: AiHealthPrivateSubnet2
+  #     DBSubnetGroupName: AiHealth-db-subnet-group
 
 Outputs:
   VPCId:
@@ -301,9 +301,9 @@ Outputs:
     Value: 
       Ref: AiHealthEC2Instance
 
-  RDSEndpoint:
-    Description: Endpoint of the RDS instance
-    Value: 
-      Fn::GetAtt: 
-        - AiHealthRDSInstance
-        - Endpoint.Address
+  # RDSEndpoint:
+  #   Description: Endpoint of the RDS instance
+  #   Value: 
+  #     Fn::GetAtt: 
+  #       - AiHealthRDSInstance
+  #       - Endpoint.Address
