@@ -31,73 +31,24 @@
           <h3>Medical Activity</h3>
 
           <div class="activities">
-            <div class="activity-card">
-              <div class="activity-details">
-                <div class="activity-img">
-                  <img src="../../Assets/bearded-doctor-glasses.jpg" alt="" />
+            <template id="activityCardTemplate">
+              <div class="activity-card">
+                <div class="activity-details">
+                  <div class="activity-img">
+                    <img src="../../Assets/bearded-doctor-glasses.jpg" alt="" />
+                  </div>
+                  <div class="details">
+                    <h4 class="activity-name">Dr Jordan</h4>
+                    <p class="activity-date">03 May, 2020</p>
+                  </div>
                 </div>
-                <div class="details">
-                  <h4 class="activity-name">Dr Jordan</h4>
-                  <p class="activity-date">03 May, 2020</p>
-                </div>
-              </div>
 
-              <div class="activity-info">
-                Dr Jordan added two new conditions to your health record
-                regarding your symptoms.
-              </div>
-            </div>
-
-            <div class="activity-card">
-              <div class="activity-details">
-                <div class="activity-img">
-                  <img src="../../Assets/bearded-doctor-glasses.jpg" alt="" />
-                </div>
-                <div class="details">
-                  <h4 class="activity-name">Dr Jordan</h4>
-                  <p class="activity-date">03 May, 2020</p>
+                <div class="activity-info">
+                  Dr Jordan added two new conditions to your health record
+                  regarding your symptoms.
                 </div>
               </div>
-
-              <div class="activity-info">
-                Dr Jordan added two new conditions to your health record
-                regarding your symptoms.
-              </div>
-            </div>
-
-            <div class="activity-card">
-              <div class="activity-details">
-                <div class="activity-img">
-                  <img src="../../Assets/bearded-doctor-glasses.jpg" alt="" />
-                </div>
-                <div class="details">
-                  <h4 class="activity-name">Dr Jordan</h4>
-                  <p class="activity-date">03 May, 2020</p>
-                </div>
-              </div>
-
-              <div class="activity-info">
-                Dr Jordan added two new conditions to your health record
-                regarding your symptoms.
-              </div>
-            </div>
-
-            <div class="activity-card">
-              <div class="activity-details">
-                <div class="activity-img">
-                  <img src="../../Assets/bearded-doctor-glasses.jpg" alt="" />
-                </div>
-                <div class="details">
-                  <h4 class="activity-name">Dr Jordan</h4>
-                  <p class="activity-date">03 May, 2020</p>
-                </div>
-              </div>
-
-              <div class="activity-info">
-                Dr Jordan added two new conditions to your health record
-                regarding your symptoms.
-              </div>
-            </div>
+            </template>
           </div>
         </div>
 
@@ -105,61 +56,38 @@
           <h3>Upcoming Appointments</h3>
 
           <div class="appointments-container">
-            <div class="appointment-card">
-              <div>
-                <p class="appointment-title">Surgery Preparation</p>
+            <template id="patientAppointmentTemplate">
+              <div class="appointment-card">
+                <div>
+                  <p class="appointment-title">Surgery Preparation</p>
 
-                <div class="appointment-doctor">
-                  <div class="doctor-img">
-                    <img src="../../Assets/bearded-doctor-glasses.jpg" alt="" />
-                  </div>
+                  <div class="appointment-doctor">
+                    <div class="doctor-img">
+                      <img
+                        src="../../Assets/bearded-doctor-glasses.jpg"
+                        alt=""
+                      />
+                    </div>
 
-                  <div class="doctor-details">
-                    <h4 class="doctor-name">Dr. Damian Lewis</h4>
-                    <p class="doctor-title">Cardiologist</p>
+                    <div class="doctor-details">
+                      <h4 class="doctor-name">Dr. Damian Lewis</h4>
+                      <p class="doctor-title">Cardiologist</p>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div class="appointment-schedule">
-                <div class="appointment-date">
-                  <span>June 12, 2023</span>
-                </div>
-
-                <div class="appointment-time">
-                  <i class="bx bx-stopwatch"></i>
-                  <span>9.00 AM - 10.00AM</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="appointment-card">
-              <div>
-                <p class="appointment-title">Surgery Preparation</p>
-
-                <div class="appointment-doctor">
-                  <div class="doctor-img">
-                    <img src="../../Assets/bearded-doctor-glasses.jpg" alt="" />
+                <div class="appointment-schedule">
+                  <div class="appointment-date">
+                    <span>June 12, 2023</span>
                   </div>
 
-                  <div class="doctor-details">
-                    <h4 class="doctor-name">Dr. Damian Lewis</h4>
-                    <p class="doctor-title">Cardiologist</p>
+                  <div class="appointment-time">
+                    <i class="bx bx-stopwatch"></i>
+                    <span>9.00 AM - 10.00AM</span>
                   </div>
                 </div>
               </div>
-
-              <div class="appointment-schedule">
-                <div class="appointment-date">
-                  <span>June 12, 2023</span>
-                </div>
-
-                <div class="appointment-time">
-                  <i class="bx bx-stopwatch"></i>
-                  <span>9.00 AM - 10.00AM</span>
-                </div>
-              </div>
-            </div>
+            </template>
           </div>
         </div>
       </div>
@@ -167,12 +95,36 @@
       <div class="bottom-section">
         <div class="left-section">
           <div class="health-overview">
+            <h3>Lab Reports</h3>
+
+            <div class="activities lab-activities">
+              <template id="labReportTemplate">
+                <div class="activity-card lab-card">
+                  <div class="activity-details">
+                    <div class="details">
+                      <h4 class="activity-name lab-test">Dr Jordan</h4>
+                      <p class="activity-date lab-date">03 May, 2020</p>
+                    </div>
+                  </div>
+
+                  <div class="activity-info lab-info">
+                    Dr Jordan added two new conditions to your health record
+                    regarding your symptoms.
+                  </div>
+                </div>
+              </template>
+            </div>
+          </div>
+          <!-- <div class="health-overview">
             <h3>Health Overview</h3>
             <div class="container">
               <div class="health-card">
                 <div class="health-condition">
                   <div class="health-icon">
-                    <img src="../../Assets/icons/heartbeat_2150832.png" alt="" />
+                    <img
+                      src="../../Assets/icons/heartbeat_2150832.png"
+                      alt=""
+                    />
                   </div>
 
                   <div class="condition-rate">
@@ -187,7 +139,10 @@
               <div class="health-card">
                 <div class="health-condition">
                   <div class="health-icon">
-                    <img src="../../Assets/icons/blood-drop_10376417.png" alt="" />
+                    <img
+                      src="../../Assets/icons/blood-drop_10376417.png"
+                      alt=""
+                    />
                   </div>
 
                   <div class="condition-rate">
@@ -232,78 +187,46 @@
                 <p class="value">56 /ml</p>
               </div>
             </div>
-          </div>
+          </div> -->
 
           <div class="prescription">
             <h3>Your Prescriptions</h3>
             <div class="prescription-container">
-              <div class="prescription-card">
-                <p class="prescription-name">Paracetamol - 500mg</p>
-                <p class="usage">1 tablet every day for 2 weeks</p>
+              <template id="prescriptionCardTemplate">
+                <div class="prescription-card">
+                  <p class="prescription-name">Paracetamol - 500mg</p>
+                  <p class="usage">1 tablet every day for 2 weeks</p>
 
-                <div class="dosage">
-                  <div class="dosage-hour">
-                    <div class="hour">
-                      <img src="../../Assets/icons/sunrise_11639071.png" />
-                      <span>Morning</span>
+                  <div class="dosage">
+                    <div class="dosage-hour">
+                      <div class="hour">
+                        <img src="../../Assets/icons/sunrise_11639071.png" />
+                        <span>Morning</span>
+                      </div>
+
+                      <p class="quantity">1-pill</p>
                     </div>
 
-                    <p class="quantity">1-pill</p>
-                  </div>
+                    <div class="dosage-hour">
+                      <div class="hour">
+                        <img src="../../Assets/icons/sunset_4229285.png" />
+                        <span>Afternoon</span>
+                      </div>
 
-                  <div class="dosage-hour">
-                    <div class="hour">
-                      <img src="../../Assets/icons/sunset_4229285.png" />
-                      <span>Afternoon</span>
+                      <p class="quantity">1-pill</p>
                     </div>
 
-                    <p class="quantity">1-pill</p>
-                  </div>
+                    <div class="dosage-hour">
+                      <div class="hour">
+                        <img src="../../Assets/icons/moon_768442.png" />
+                        <span>Evening</span>
+                      </div>
 
-                  <div class="dosage-hour">
-                    <div class="hour">
-                      <img src="../../Assets/icons/moon_768442.png" />
-                      <span>Evening</span>
+                      <p class="quantity">1-pill</p>
                     </div>
-
-                    <p class="quantity">1-pill</p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="prescription-card">
-                <p class="prescription-name">Liquifying - 450ml</p>
-                <p class="usage">1 teaspoon every day for 2 weeks</p>
-
-                <div class="dosage">
-                  <div class="dosage-hour">
-                    <div class="hour">
-                      <img src="../../Assets/icons/sunrise_11639071.png" />
-                      <span>Morning</span>
-                    </div>
-
-                    <p class="quantity">1-spoon</p>
-                  </div>
-
-                  <div class="dosage-hour">
-                    <div class="hour">
-                      <img src="../../Assets/icons/sunset_4229285.png" />
-                      <span>Afternoon</span>
-                    </div>
-
-                    <p class="quantity">1-spoon</p>
-                  </div>
-
-                  <div class="dosage-hour">
-                    <div class="hour">
-                      <img src="../../Assets/icons/moon_768442.png" />
-                      <span>Evening</span>
-                    </div>
-
-                    <p class="quantity">1-spoon</p>
                   </div>
                 </div>
-              </div>
+              </template>
             </div>
           </div>
         </div>
