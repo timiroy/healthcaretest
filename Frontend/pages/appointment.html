@@ -26,198 +26,47 @@
     />
   </head>
   <body>
-    <div class="appointment-content">
+    <div class="appointment-content" id="appointments">
       <div class="appointments-page">
         <h2>Upcoming Appointments</h2>
 
         <div class="appointments-container">
-          <div class="appointment-card">
-            <div>
-              <p class="appointment-title">Surgery Preparation</p>
+          <template id="appointmentCardTemplate">
+            <div class="appointment-card">
+              <div>
+                <p class="appointment-title">Surgery Preparation</p>
 
-              <div class="appointment-doctor">
-                <div class="doctor-img">
-                  <img
-                    src="../../Assets/bearded-doctor-glasses.jpg"
-                    alt="Doctor"
-                  />
-                </div>
+                <div class="appointment-doctor">
+                  <div class="doctor-img">
+                    <img
+                      src="../../Assets/bearded-doctor-glasses.jpg"
+                      alt="Doctor"
+                    />
+                  </div>
 
-                <div class="doctor-details">
-                  <h4 class="doctor-name">Dr. Damian Lewis</h4>
-                  <p class="doctor-title">Cardiologist</p>
+                  <div class="doctor-details">
+                    <h4 class="doctor-name">Dr. Damian Lewis</h4>
+                    <p class="doctor-title">Cardiologist</p>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div class="appointment-schedule">
-              <div class="appointment-date">
-                <span>June 12, 2023</span>
-              </div>
-
-              <div class="appointment-time">
-                <i class="bx bx-stopwatch"></i>
-                <span>9.00 AM - 10.00AM</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="appointment-card">
-            <div>
-              <p class="appointment-title">Surgery Preparation</p>
-
-              <div class="appointment-doctor">
-                <div class="doctor-img">
-                  <img
-                    src="../../Assets/bearded-doctor-glasses.jpg"
-                    alt="Doctor"
-                  />
+              <div class="appointment-schedule">
+                <div class="appointment-date">
+                  <span>June 12, 2023</span>
                 </div>
 
-                <div class="doctor-details">
-                  <h4 class="doctor-name">Dr. Damian Lewis</h4>
-                  <p class="doctor-title">Cardiologist</p>
+                <div class="appointment-time">
+                  <i class="bx bx-stopwatch"></i>
+                  <span>9.00 AM - 10.00AM</span>
                 </div>
               </div>
             </div>
-
-            <div class="appointment-schedule">
-              <div class="appointment-date">
-                <span>June 12, 2023</span>
-              </div>
-
-              <div class="appointment-time">
-                <i class="bx bx-stopwatch"></i>
-                <span>9.00 AM - 10.00AM</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="appointment-card">
-            <div>
-              <p class="appointment-title">Surgery Preparation</p>
-
-              <div class="appointment-doctor">
-                <div class="doctor-img">
-                  <img
-                    src="../../Assets/bearded-doctor-glasses.jpg"
-                    alt="Doctor"
-                  />
-                </div>
-
-                <div class="doctor-details">
-                  <h4 class="doctor-name">Dr. Damian Lewis</h4>
-                  <p class="doctor-title">Cardiologist</p>
-                </div>
-              </div>
-            </div>
-
-            <div class="appointment-schedule">
-              <div class="appointment-date">
-                <span>June 12, 2023</span>
-              </div>
-
-              <div class="appointment-time">
-                <i class="bx bx-stopwatch"></i>
-                <span>9.00 AM - 10.00AM</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="appointment-card">
-            <div>
-              <p class="appointment-title">Surgery Preparation</p>
-
-              <div class="appointment-doctor">
-                <div class="doctor-img">
-                  <img
-                    src="../../Assets/bearded-doctor-glasses.jpg"
-                    alt="Doctor"
-                  />
-                </div>
-
-                <div class="doctor-details">
-                  <h4 class="doctor-name">Dr. Damian Lewis</h4>
-                  <p class="doctor-title">Cardiologist</p>
-                </div>
-              </div>
-            </div>
-
-            <div class="appointment-schedule">
-              <div class="appointment-date">
-                <span>June 12, 2023</span>
-              </div>
-
-              <div class="appointment-time">
-                <i class="bx bx-stopwatch"></i>
-                <span>9.00 AM - 10.00AM</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="appointment-card">
-            <div>
-              <p class="appointment-title">Surgery Preparation</p>
-
-              <div class="appointment-doctor">
-                <div class="doctor-img">
-                  <img
-                    src="../../Assets/bearded-doctor-glasses.jpg"
-                    alt="Doctor"
-                  />
-                </div>
-
-                <div class="doctor-details">
-                  <h4 class="doctor-name">Dr. Damian Lewis</h4>
-                  <p class="doctor-title">Cardiologist</p>
-                </div>
-              </div>
-            </div>
-
-            <div class="appointment-schedule">
-              <div class="appointment-date">
-                <span>June 12, 2023</span>
-              </div>
-
-              <div class="appointment-time">
-                <i class="bx bx-stopwatch"></i>
-                <span>9.00 AM - 10.00AM</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="appointment-card">
-            <div>
-              <p class="appointment-title">Surgery Preparation</p>
-
-              <div class="appointment-doctor">
-                <div class="doctor-img">
-                  <img
-                    src="../../Assets/bearded-doctor-glasses.jpg"
-                    alt="Doctor"
-                  />
-                </div>
-
-                <div class="doctor-details">
-                  <h4 class="doctor-name">Dr. Damian Lewis</h4>
-                  <p class="doctor-title">Cardiologist</p>
-                </div>
-              </div>
-            </div>
-
-            <div class="appointment-schedule">
-              <div class="appointment-date">
-                <span>June 12, 2023</span>
-              </div>
-
-              <div class="appointment-time">
-                <i class="bx bx-stopwatch"></i>
-                <span>9.00 AM - 10.00AM</span>
-              </div>
-            </div>
-          </div>
+          </template>
         </div>
       </div>
     </div>
+
+    <script src="../scripts/appointment.js"></script>
   </body>
 </html>
