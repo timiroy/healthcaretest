@@ -7,6 +7,8 @@ from langchain.chains import LLMChain
 from langchain_community.chat_models import BedrockChat
 from langchain.prompts import PromptTemplate
 
+# Set page config at the very beginning
+st.set_page_config(page_title="🦙💬 MEDICARE Chatbot")
 # Function to get the bearer token from URL parameters
 def get_access_token_from_url():
     # Retrieve query parameters
@@ -104,8 +106,8 @@ def my_chatbot(language, freeform_text, client_data):
     response = bedrock_chain({'language': language, 'freeform_text': freeform_text})
     return response
 
-# Streamlit app
-st.set_page_config(page_title="🦙💬 Llama 2 Chatbot")
+# # Streamlit app
+# st.set_page_config(page_title="🦙💬 MEDICARE Chatbot")
 
 # Store LLM generated responses
 if "messages" not in st.session_state.keys():
