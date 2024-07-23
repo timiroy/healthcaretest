@@ -1,14 +1,22 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+  box-sizing: border-box;
+}
+
 .dashboard {
   margin-top: 70px;
   display: flex;
   flex-direction: column;
   height: calc(100vh - 90px);
+  overflow: hidden;
 }
 
 .top-section {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .bottom-section {
@@ -17,7 +25,7 @@
 }
 
 .medical-history,
-.appointments,
+.health-overview .appointments,
 .right-section {
   flex: 1;
   background-color: #fff;
@@ -34,14 +42,18 @@
   overflow-y: auto;
 }
 
-.medical-history {
-  height: 200px;
+.medical-history,
+.health-overview,
+.prescription {
+  height: 180px;
   display: flex;
   flex-direction: column;
 }
 
 .medical-history h3,
-.appointments h3 {
+.appointments h3,
+.health-overview h3,
+.prescription h3 {
   padding-bottom: 10px;
   color: #494949;
   margin: 0 -10px;
@@ -62,7 +74,24 @@
   margin-top: 10px;
 }
 
-.activity-card {
+.history-card {
+  flex-direction: column;
+  gap: 3px;
+}
+
+.condition-name {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.history-note,
+.diagnosis-date {
+  font-size: 12px;
+  color: #494949;
+}
+
+.activity-card,
+.history-card {
   background: white;
   padding: 10px 12px;
   margin: 0 -12px 10px -12px;
@@ -181,6 +210,7 @@
 
 .appointment-date,
 .appointment-time {
+  justify-content: center;
   display: flex;
   align-items: center;
   margin-right: 10px;
@@ -208,21 +238,9 @@
   margin-bottom: 20px;
 }
 
-/* .health-overview .container,
-  .prescription .prescription-container {
-    padding: 10px;
-  } */
-
 .health-overview .container {
   display: flex;
   justify-content: space-evenly;
-}
-
-.health-overview h3,
-.prescription h3 {
-  padding-bottom: 10px;
-  color: #494949;
-  padding: 10px 10px 10px 10px;
 }
 
 .health-card {
@@ -257,12 +275,10 @@
   border-radius: 50%;
 }
 
-.prescription {
-  height: 230px;
-}
-
 .prescription-container {
   display: flex;
+  flex-direction: column;
+  gap: 10px;
   justify-content: space-evenly;
   height: 70%;
 }
@@ -274,6 +290,14 @@
   border: 3px solid #faf9f6;
   border-radius: 10px;
   padding: 15px 0px;
+}
+
+.lab-card {
+  border: 3px solid #faf9f6;
+  border-radius: 10px;
+  padding: 15px 0px;
+  margin: 0px 3px;
+  margin-bottom: 10px;
 }
 
 .prescription-name {

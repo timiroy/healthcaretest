@@ -26,75 +26,19 @@
   </head>
   <body>
     <div class="prescription-content">
-      <h3>Your Prescriptions</h3>
+      <h2>Medications</h2>
       <div class="prescription-container">
-        <div class="prescription-card">
-          <p class="prescription-name">Paracetamol - 500mg</p>
-          <p class="usage">1 tablet every day for 2 weeks</p>
-
-          <div class="dosage">
-            <div class="dosage-hour">
-              <div class="hour">
-                <img src="../../Assets/icons/sunrise_11639071.png" />
-                <span>Morning</span>
-              </div>
-
-              <p class="quantity">1-pill</p>
-            </div>
-
-            <div class="dosage-hour">
-              <div class="hour">
-                <img src="../../Assets/icons/sunset_4229285.png" />
-                <span>Afternoon</span>
-              </div>
-
-              <p class="quantity">1-pill</p>
-            </div>
-
-            <div class="dosage-hour">
-              <div class="hour">
-                <img src="../../Assets/icons/moon_768442.png" />
-                <span>Evening</span>
-              </div>
-
-              <p class="quantity">1-pill</p>
-            </div>
+        <template id="medicationTemplate">
+          <div class="prescription-card">
+            <p class="prescription-name">Paracetamol - 500mg</p>
+            <p class="usage">1 tablet every day for 2 weeks</p>
           </div>
-        </div>
 
-        <div class="prescription-card">
-          <p class="prescription-name">Liquifying - 450ml</p>
-          <p class="usage">1 teaspoon every day for 2 weeks</p>
-
-          <div class="dosage">
-            <div class="dosage-hour">
-              <div class="hour">
-                <img src="../../Assets/icons/sunrise_11639071.png" />
-                <span>Morning</span>
-              </div>
-
-              <p class="quantity">1-spoon</p>
-            </div>
-
-            <div class="dosage-hour">
-              <div class="hour">
-                <img src="../../Assets/icons/sunset_4229285.png" />
-                <span>Afternoon</span>
-              </div>
-
-              <p class="quantity">1-spoon</p>
-            </div>
-
-            <div class="dosage-hour">
-              <div class="hour">
-                <img src="../../Assets/icons/moon_768442.png" />
-                <span>Evening</span>
-              </div>
-
-              <p class="quantity">1-spoon</p>
-            </div>
+          <div class="prescription-card">
+            <p class="prescription-name">Liquifying - 450ml</p>
+            <p class="usage">1 teaspoon every day for 2 weeks</p>
           </div>
-        </div>
+        </template>
       </div>
     </div>
   </body>
