@@ -1,6 +1,7 @@
 const fullUserDetails = JSON.parse(sessionStorage.getItem("authDetails"));
 const token = fullUserDetails?.token.access_token;
 const userData = fullUserDetails?.user;
+
 const logout = document.getElementById("logout-link");
 
 logout.addEventListener("click", () => {
@@ -53,6 +54,12 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
 
+      const userGreeting = document.getElementById("greetUser");
+      userGreeting.textContent = `Hello ${patientData.first_name}! 👋`;
+
+      const userProfilePic = document.getElementById("profile-img");
+      userProfilePic.src = patientData.profile_image;
+
       const appointmentTemplate = document.getElementById(
         "patientAppointmentTemplate"
       ).content;
@@ -75,7 +82,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const billRow = document.importNode(billingsTemplate, true);
 
         // Populate the template with lab result data
-        billRow.querySelector(".amount-text").textContent = bill?.amount;
+        billRow.querySelector(".amount-text").textContent = `$${bill?.amount}`;
         billRow.querySelector(".status").textContent =
           bill?.status.toLowerCase() === "not_paid" ? "NOT PAID" : bill?.status;
         billRow.querySelector(".status").style.backgroundColor =
@@ -113,7 +120,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const labCard = document.importNode(labReportTemplate, true);
 
         // Populate the template with lab result data
-        labCard.querySelector(".lab-info").textContent = appointment?.result;
+        labCard.querySelector(".lab-info").textContent = appointment?.notes;
         labCard.querySelector(".lab-test").textContent = appointment?.test_name;
         labCard.querySelector(".lab-date").textContent = new Date(
           appointment?.test_date
@@ -162,7 +169,7 @@ document.addEventListener("DOMContentLoaded", function () {
         appointmentCard.querySelector(".appointment-date span").textContent =
           new Date(appointment?.appointment_date).toLocaleDateString("en-US", {
             day: "numeric",
-            month: "long",
+            month: "short",
             year: "numeric",
           });
         appointmentCard.querySelector(".appointment-time span").textContent =
@@ -185,7 +192,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   async function upcomingAppointment(appointmentContainer) {
     console.log(appointmentContainer);
-    const url = `http://13.48.48.198/v1/appointments/?doctor_id=80629581-262d-4426-b703-7d11ad7703dd&patient_id=${userData.user_id}`;
+    const url = `http://13.48.48.198/v1/appointments/?patient_id=${userData.user_id}`;
 
     try {
       const response = await fetch(url, {
@@ -216,7 +223,11 @@ document.addEventListener("DOMContentLoaded", function () {
         appointmentCard.querySelector(".doctor-title").textContent =
           "Cardiologist";
         appointmentCard.querySelector(".appointment-date span").textContent =
-          new Date(appointment?.appointment_date).toLocaleDateString();
+          new Date(appointment?.appointment_date).toLocaleDateString("en-US", {
+            day: "numeric",
+            month: "short",
+            year: "numeric",
+          });
         appointmentCard.querySelector(".appointment-time span").textContent =
           new Date(appointment?.appointment_date).toLocaleTimeString();
 
@@ -296,7 +307,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const billRow = document.importNode(template, true);
 
         // Populate the template with lab result data
-        billRow.querySelector(".amount-text").textContent = bill?.amount;
+        billRow.querySelector(".amount-text").textContent = `$${bill?.amount}`;
         billRow.querySelector(".status").textContent =
           bill?.status.toLowerCase() === "not_paid" ? "NOT PAID" : bill?.status;
         billRow.querySelector(".status").style.backgroundColor =
