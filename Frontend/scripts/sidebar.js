@@ -7,6 +7,13 @@ logout.addEventListener("click", () => {
   sessionStorage.clear();
 });
 
+console.log(token);
+
+if (token === undefined) {
+  console.log("Don't bypass");
+  window.location.href = "/index.html";
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   const navLinks = document.querySelectorAll(".tab-link");
   const mainContent = document.querySelector(".main-content");
@@ -25,6 +32,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const dashboardMedications = dashboardContainer.querySelector(
       ".prescription-container"
     );
+
+    const dashboardBillContainer =
+      dashboardContainer.querySelector(".billings-table");
 
     const url = `http://13.48.48.198/v1/auth/me`;
     // const patientData = JSON.parse(sessionStorage.getItem("patientDetails"));
@@ -58,6 +68,34 @@ document.addEventListener("DOMContentLoaded", function () {
         "prescriptionCardTemplate"
       ).content;
 
+      const billingsTemplate =
+        document.getElementById("billingsTemplate").content;
+
+      patientData.billings.forEach((bill) => {
+        const billRow = document.importNode(billingsTemplate, true);
+
+        // Populate the template with lab result data
+        billRow.querySelector(".amount-text").textContent = bill?.amount;
+        billRow.querySelector(".status").textContent =
+          bill?.status.toLowerCase() === "not_paid" ? "NOT PAID" : bill?.status;
+        billRow.querySelector(".status").style.backgroundColor =
+          bill?.status.toLowerCase() === "not_paid"
+            ? "#d893a3"
+            : bill?.status.toLowerCase() === "paid"
+            ? "#86e49d"
+            : "#ebc474";
+        billRow.querySelector(".status").style.color =
+          bill?.status.toLowerCase() === "not_paid"
+            ? "#b30021"
+            : bill?.status.toLowerCase() === "paid"
+            ? "#006b21"
+            : "black";
+        billRow.querySelector(".service-title").textContent = bill?.title;
+
+        // Append the populated template to the container
+        dashboardBillContainer.appendChild(billRow);
+      });
+
       patientData.medications.forEach((appointment) => {
         const medicationCard = document.importNode(medicationsTemplate, true);
 
@@ -74,33 +112,38 @@ document.addEventListener("DOMContentLoaded", function () {
       patientData.lab_reports.forEach((appointment) => {
         const labCard = document.importNode(labReportTemplate, true);
 
-        // Populate the template with appointment data
+        // Populate the template with lab result data
         labCard.querySelector(".lab-info").textContent = appointment?.result;
         labCard.querySelector(".lab-test").textContent = appointment?.test_name;
         labCard.querySelector(".lab-date").textContent = new Date(
           appointment?.test_date
-        ).toLocaleDateString();
+        ).toLocaleDateString("en-US", {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        });
 
         // Append the populated template to the container
         dashboardLabActivity.appendChild(labCard);
       });
 
-      patientData.visits.forEach((appointment) => {
+      patientData.medical_history.forEach((appointment) => {
         const medicalCard = document.importNode(medicalActivityTemplate, true);
 
-        // Populate the template with appointment data
-        medicalCard.querySelector(".activity-info").textContent =
-          appointment?.reason_for_visit;
-        medicalCard.querySelector(".activity-name").textContent =
-          appointment?.doctor.first_name;
-        medicalCard.querySelector(".activity-date").textContent = new Date(
-          appointment?.visit_date
-        ).toLocaleDateString();
-
-        const activityDoctorImg =
-          medicalCard.querySelector(".activity-img img");
-        activityDoctorImg.src = "../../Assets/bearded-doctor-glasses.jpg";
-        activityDoctorImg.alt = `Image of ${appointment?.doctor.first_name}`;
+        // Populate the template with medical visits data
+        medicalCard.querySelector(".history-note").textContent =
+          appointment?.notes;
+        medicalCard.querySelector(".condition-name").textContent =
+          appointment?.condition;
+        medicalCard.querySelector(
+          ".diagnosis-date"
+        ).textContent = `Diagnosed on ${new Date(
+          appointment?.diagnosis_date
+        ).toLocaleDateString("en-US", {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        })}`;
 
         // Append the populated template to the container
         dashboardMedicalActivity.appendChild(medicalCard);
@@ -117,9 +160,16 @@ document.addEventListener("DOMContentLoaded", function () {
         appointmentCard.querySelector(".doctor-title").textContent =
           "Cardiologist";
         appointmentCard.querySelector(".appointment-date span").textContent =
-          new Date(appointment?.appointment_date).toLocaleDateString();
+          new Date(appointment?.appointment_date).toLocaleDateString("en-US", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          });
         appointmentCard.querySelector(".appointment-time span").textContent =
-          new Date(appointment?.appointment_date).toLocaleTimeString();
+          new Date(appointment?.appointment_date).toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          });
 
         const doctorImg = appointmentCard.querySelector(".doctor-img img");
         doctorImg.src = "../../Assets/bearded-doctor-glasses.jpg";
@@ -182,55 +232,94 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // async function prescriptions(prescriptionContainer) {
-  //   console.log(prescriptionContainer);
-  //   const url = `http://13.48.48.198/v1/appointments/?doctor_id=80629581-262d-4426-b703-7d11ad7703dd&patient_id=61ab2924-1fd1-476c-9417-7d06ede789ce`;
+  async function medications(prescriptionContainer) {
+    console.log(prescriptionContainer);
+    const url = `http://13.48.48.198/v1/medications/?patient_id=${userData.user_id}`;
 
-  //   try {
-  //     const response = await fetch(url, {
-  //       headers: {
-  //         Authorization:
-  //           "Bearer .eJwNyt0OQzAYANB38QBChemlUHw2OoKpmyVrhJZhFvHz9Nu5PkpzRN0r4IKKCIoT9ETAF8bM5C5Y0M9V6UZY_Sedo_Ko0NCDnEQi_Y5JMGOZ7vU73ROPI3b2Wpxzo_YcVD-yITlbk6FC3NxoaEJHUEmMWBJEvfSguY9VNlHjcx3Fsj4lhHcbC6u9rMuIvZkMRWCXbNtsDVsmIcoPMMY2kQ.9UxbMcGljyfJBplD8AQKNcqTxEY",
-  //       },
-  //     });
+    try {
+      const response = await fetch(url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-  //     const appointmentsData = await response.json();
+      const medicationsData = await response.json();
 
-  //     if (!appointmentsData || !Array.isArray(appointmentsData.appointments)) {
-  //       console.error("No appointments found.");
-  //       return;
-  //     }
+      if (!medicationsData || !Array.isArray(medicationsData.medications)) {
+        console.error("No appointments found.");
+        return;
+      }
 
-  //     const template = document.getElementById(
-  //       "appointmentCardTemplate"
-  //     ).content;
+      const template = document.getElementById("medicationTemplate").content;
 
-  //     appointmentsData.appointments.forEach((appointment) => {
-  //       const appointmentCard = document.importNode(template, true);
+      medicationsData.medications.forEach((medication) => {
+        const medicationCard = document.importNode(template, true);
 
-  //       // Populate the template with appointment data
-  //       appointmentCard.querySelector(".appointment-title").textContent =
-  //         appointment?.reason_for_appointment;
-  //       appointmentCard.querySelector(".doctor-name").textContent =
-  //         "Dr Shaun Murphy";
-  //       appointmentCard.querySelector(".doctor-title").textContent =
-  //         "Cardiologist";
-  //       appointmentCard.querySelector(".appointment-date span").textContent =
-  //         new Date(appointment?.appointment_date).toLocaleDateString();
-  //       appointmentCard.querySelector(".appointment-time span").textContent =
-  //         new Date(appointment?.appointment_date).toLocaleTimeString();
+        // Populate the template with appointment data
+        medicationCard.querySelector(".prescription-name").textContent =
+          medication?.medication_name;
+        medicationCard.querySelector(".usage").textContent = medication?.dosage;
 
-  //       const doctorImg = appointmentCard.querySelector(".doctor-img img");
-  //       doctorImg.src = "../../Assets/bearded-doctor-glasses.jpg";
-  //       doctorImg.alt = `Image of ${appointment.doctorName}`;
+        // Append the populated template to the container
+        prescriptionContainer.appendChild(medicationCard);
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
-  //       // Append the populated template to the container
-  //       appointmentContainer.appendChild(appointmentCard);
-  //     });
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // }
+  async function billings(billingsContainer) {
+    const url = `http://13.48.48.198/v1/billings`;
+
+    try {
+      const response = await fetch(url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const billingsData = await response.json();
+      console.log(billingsData);
+
+      if (!billingsData || !Array.isArray(billingsData.billings)) {
+        console.error("No billings found.");
+        return;
+      }
+
+      const template = document.getElementById(
+        "billingsDashboardTemplate"
+      ).content;
+
+      console.log(billingsData.billings);
+
+      billingsData.billings.forEach((bill) => {
+        const billRow = document.importNode(template, true);
+
+        // Populate the template with lab result data
+        billRow.querySelector(".amount-text").textContent = bill?.amount;
+        billRow.querySelector(".status").textContent =
+          bill?.status.toLowerCase() === "not_paid" ? "NOT PAID" : bill?.status;
+        billRow.querySelector(".status").style.backgroundColor =
+          bill?.status.toLowerCase() === "not_paid"
+            ? "#d893a3"
+            : bill?.status.toLowerCase() === "paid"
+            ? "#86e49d"
+            : "#ebc474";
+        billRow.querySelector(".status").style.color =
+          bill?.status.toLowerCase() === "not_paid"
+            ? "#b30021"
+            : bill?.status.toLowerCase() === "paid"
+            ? "#006b21"
+            : "black";
+        billRow.querySelector(".service-title").textContent = bill?.title;
+
+        // Append the populated template to the container
+        billingsContainer.appendChild(billRow);
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   async function loadContent(url) {
     try {
@@ -241,15 +330,16 @@ document.addEventListener("DOMContentLoaded", function () {
       const appointmentContainer = mainContent.querySelector(
         ".appointments-container"
       );
+      const prescriptionContainer = mainContent.querySelector(
+        ".prescription-container"
+      );
       const dashboardContainer = mainContent.querySelector(".dashboard");
+      const billingsContainer = mainContent.querySelector(".billings-table");
 
-      // console.log(appointmentContainer);
-      // console.log(dashboardAppointment);
-      // if (appointmentContainer) {
-
-      // }
       patientDetails(dashboardContainer);
       upcomingAppointment(appointmentContainer);
+      medications(prescriptionContainer);
+      billings(billingsContainer);
     } catch (error) {
       mainContent.innerHTML =
         "<p>Failed to load content. Please try again later.</p>";

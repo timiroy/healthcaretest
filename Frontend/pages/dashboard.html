@@ -28,25 +28,24 @@
     <div class="dashboard">
       <div class="top-section">
         <div class="medical-history">
-          <h3>Medical Activity</h3>
+          <h3>Medical History</h3>
 
           <div class="activities">
             <template id="activityCardTemplate">
-              <div class="activity-card">
-                <div class="activity-details">
+              <div class="history-card">
+                <!-- <div class="activity-details">
                   <div class="activity-img">
                     <img src="../../Assets/bearded-doctor-glasses.jpg" alt="" />
                   </div>
-                  <div class="details">
-                    <h4 class="activity-name">Dr Jordan</h4>
-                    <p class="activity-date">03 May, 2020</p>
-                  </div>
-                </div>
 
-                <div class="activity-info">
+                  <div class="details"></div>
+                </div> -->
+                <h4 class="condition-name">Dr Jordan</h4>
+                <div class="history-note">
                   Dr Jordan added two new conditions to your health record
                   regarding your symptoms.
                 </div>
+                <p class="diagnosis-date">03 May, 2020</p>
               </div>
             </template>
           </div>
@@ -115,116 +114,14 @@
               </template>
             </div>
           </div>
-          <!-- <div class="health-overview">
-            <h3>Health Overview</h3>
-            <div class="container">
-              <div class="health-card">
-                <div class="health-condition">
-                  <div class="health-icon">
-                    <img
-                      src="../../Assets/icons/heartbeat_2150832.png"
-                      alt=""
-                    />
-                  </div>
-
-                  <div class="condition-rate">
-                    <p class="condition">Heart Rate</p>
-                    <p class="rate">Normal</p>
-                  </div>
-                </div>
-
-                <p class="value">120bpm</p>
-              </div>
-
-              <div class="health-card">
-                <div class="health-condition">
-                  <div class="health-icon">
-                    <img
-                      src="../../Assets/icons/blood-drop_10376417.png"
-                      alt=""
-                    />
-                  </div>
-
-                  <div class="condition-rate">
-                    <p class="condition">Blood Count</p>
-                    <p class="rate">Normal</p>
-                  </div>
-                </div>
-
-                <p class="value">80-90</p>
-              </div>
-
-              <div class="health-card">
-                <div class="health-condition">
-                  <div class="health-icon">
-                    <img
-                      src="../../Assets/icons/blood-donation_7006319.png"
-                      alt=""
-                    />
-                  </div>
-
-                  <div class="condition-rate">
-                    <p class="condition">Glucose</p>
-                    <p class="rate">Normal</p>
-                  </div>
-                </div>
-
-                <p class="value">230 /ml</p>
-              </div>
-
-              <div class="health-card">
-                <div class="health-condition">
-                  <div class="health-icon">
-                    <img src="../../Assets/icons/health_7903776.png" alt="" />
-                  </div>
-
-                  <div class="condition-rate">
-                    <p class="condition">Hemoglobin</p>
-                    <p class="rate">Normal</p>
-                  </div>
-                </div>
-
-                <p class="value">56 /ml</p>
-              </div>
-            </div>
-          </div> -->
 
           <div class="prescription">
-            <h3>Your Prescriptions</h3>
-            <div class="prescription-container">
+            <h3>Medications</h3>
+            <div class="activities prescription-container">
               <template id="prescriptionCardTemplate">
                 <div class="prescription-card">
                   <p class="prescription-name">Paracetamol - 500mg</p>
                   <p class="usage">1 tablet every day for 2 weeks</p>
-
-                  <div class="dosage">
-                    <div class="dosage-hour">
-                      <div class="hour">
-                        <img src="../../Assets/icons/sunrise_11639071.png" />
-                        <span>Morning</span>
-                      </div>
-
-                      <p class="quantity">1-pill</p>
-                    </div>
-
-                    <div class="dosage-hour">
-                      <div class="hour">
-                        <img src="../../Assets/icons/sunset_4229285.png" />
-                        <span>Afternoon</span>
-                      </div>
-
-                      <p class="quantity">1-pill</p>
-                    </div>
-
-                    <div class="dosage-hour">
-                      <div class="hour">
-                        <img src="../../Assets/icons/moon_768442.png" />
-                        <span>Evening</span>
-                      </div>
-
-                      <p class="quantity">1-pill</p>
-                    </div>
-                  </div>
                 </div>
               </template>
             </div>
@@ -241,102 +138,34 @@
                     <tr class="headings-row">
                       <th class="service-header">Service</th>
                       <th class="provider-header">Provider</th>
-                      <th class="date-header">Date</th>
+                      <!-- <th class="date-header">Date</th> -->
                       <th class="status-header">Status</th>
                       <th class="ammount-header">Amount</th>
                     </tr>
                   </thead>
 
-                  <tbody>
-                    <tr class="billings-row">
-                      <td class="service-header">Full body checkup</td>
-                      <td class="provider-header">
-                        <img
-                          src="../../Assets/bearded-doctor-glasses.jpg"
-                          alt=""
-                        />Dr Jordan
-                      </td>
-                      <td class="date-header">17 Dec, 2023</td>
-                      <td class="status-header">
-                        <p class="status pending">Pending</p>
-                      </td>
-                      <td class="amount-header">
-                        <strong> $128.90 </strong>
-                      </td>
-                    </tr>
-
-                    <tr class="billings-row">
-                      <td class="service-header">
-                        Ear and throat examination due to infection
-                      </td>
-                      <td class="provider-header">
-                        <img
-                          src="../../Assets/bearded-doctor-glasses.jpg"
-                          alt=""
-                        />Dr Jordan
-                      </td>
-                      <td class="date-header">17 Dec, 2023</td>
-                      <td class="status-header">
-                        <p class="status paid">Paid</p>
-                      </td>
-                      <td class="amount-header">
-                        <strong> $128.90 </strong>
-                      </td>
-                    </tr>
-
-                    <tr class="billings-row">
-                      <td class="service-header">Full body checkup</td>
-                      <td class="provider-header">
-                        <img
-                          src="../../Assets/bearded-doctor-glasses.jpg"
-                          alt=""
-                        />Dr Jordan
-                      </td>
-                      <td class="date-header">17 Dec, 2023</td>
-                      <td class="status-header">
-                        <p class="status notpaid">Not Paid</p>
-                      </td>
-                      <td class="amount-header">
-                        <strong> $128.90 </strong>
-                      </td>
-                    </tr>
-
-                    <tr class="billings-row">
-                      <td class="service-header">
-                        Ear and throat examination due to infection
-                      </td>
-                      <td class="provider-header">
-                        <img
-                          src="../../Assets/bearded-doctor-glasses.jpg"
-                          alt=""
-                        />Dr Jordan
-                      </td>
-                      <td class="date-header">17 Dec, 2023</td>
-                      <td class="status-header">
-                        <p class="status paid">Paid</p>
-                      </td>
-                      <td class="amount-header"><strong> $70.90 </strong></td>
-                    </tr>
-
-                    <tr class="billings-row">
-                      <td class="service-header">
-                        Ear and throat examination due to infection
-                      </td>
-                      <td class="provider-header">
-                        <img
-                          src="../../Assets/bearded-doctor-glasses.jpg"
-                          alt=""
-                        />Dr Jordan
-                      </td>
-                      <td class="date-header">17 Dec, 2023</td>
-                      <td class="status-header">
-                        <p class="status paid">Paid</p>
-                      </td>
-                      <td class="amount-header">
-                        <strong> $128.90 </strong>
-                      </td>
-                    </tr>
-                  </tbody>
+                  <template id="billingsTemplate">
+                    <tbody>
+                      <tr class="billings-row">
+                        <td class="service-header service-title">
+                          Full body checkup
+                        </td>
+                        <td class="provider-header">
+                          <img
+                            src="../../Assets/bearded-doctor-glasses.jpg"
+                            alt=""
+                          />Dr Jordan
+                        </td>
+                        <!-- <td class="date-header date-text">17 Dec, 2023</td> -->
+                        <td class="status-header">
+                          <p class="status pending">Pending</p>
+                        </td>
+                        <td class="amount-header">
+                          <strong class="amount-text"> $128.90 </strong>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </template>
                 </table>
               </div>
             </div>
