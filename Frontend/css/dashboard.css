@@ -144,6 +144,10 @@ body {
   width: 70%;
 }
 
+.lab-info {
+  font-size: 14px;
+}
+
 .appointments {
   flex: 1;
   background-color: #fff;

@@ -82,9 +82,6 @@ async function signUpAuth() {
     const data = await response.json();
 
     if (response.ok) {
-      // sessionStorage.setItem("authDetails", JSON.stringify(data));
-      // window.location.href = "../../Frontend/pages/sidebar.html";
-
       alert("Account Created, proceed to login.");
     }
 
@@ -94,19 +91,8 @@ async function signUpAuth() {
   }
 }
 
-// Function to handle successful login and redirect to dashboard
-// function redirectToDashboard() {
-//   window.location.href = "../../Frontend/pages/sidebar.html";
-// }
-
 formOpenBtn.addEventListener("click", () => home.classList.add("show"));
 formCloseBtn.addEventListener("click", () => home.classList.remove("show"));
-
-// document.getElementById("login-form").addEventListener("submit", (event) => {
-//   event.preventDefault();
-//   console.log("Form clicked");
-//   loginAuth();
-// });
 
 emailLogin.addEventListener("change", (e) => {
   emailInput = e.target.value;
@@ -181,6 +167,5 @@ signup_btn.addEventListener("click", (e) => {
 login_btn.addEventListener("click", (event) => {
   event.preventDefault();
   console.log(emailInput, passwordInput);
-  // Mock login success - replace this with actual login logic
   loginAuth();
 });
