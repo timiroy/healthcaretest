@@ -14,7 +14,18 @@ Parameters:
       - t3.small
       - t3.medium
     ConstraintDescription: Must be a valid EC2 instance type.
-
+  InstanceTypeBackend:
+    Description: EC2 instance for Backend type
+    Type: String
+    Default: t2.micro
+    AllowedValues:
+      - t2.micro
+      - t2.small
+      - t2.medium
+      - t3.micro
+      - t3.small
+      - t3.medium
+    ConstraintDescription: Must be a valid EC2 instance type.
   KeyName:
     Description: Name of an existing EC2 KeyPair to enable SSH access to the instance
     Type: AWS::EC2::KeyPair::KeyName
@@ -24,7 +35,10 @@ Parameters:
     Description: AMI ID for the EC2 instance
     Type: AWS::EC2::Image::Id
     ConstraintDescription: Must be a valid AMI ID.
-
+  AMIBackend:
+    Description: AMI ID for the EC2 Backend instance
+    Type: AWS::EC2::Image::Id
+    ConstraintDescription: Must be a valid AMI ID.
   DBUsername:
     Description: The database admin account username
     Type: String
@@ -191,6 +205,25 @@ Resources:
           ToPort: 8501
           CidrIp: 0.0.0.0/0
 
+  AiHealthBackendEC2SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties: 
+      GroupDescription: Enable SSH access via port 22, HTTP via port 80, HTTPS via port 443, and custom port 8501
+      VpcId: 
+        Ref: AiHealthVPC
+      SecurityGroupIngress: 
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
   # AiHealthRDSSecurityGroup:
   #   Type: AWS::EC2::SecurityGroup
   #   Properties:
@@ -240,6 +273,23 @@ Resources:
       Tags:
         - Key: Name
           Value: AiHealthEC2Instance
+
+  AiHealthBackendEC2Instance:
+    Type: AWS::EC2::Instance
+    Properties: 
+      InstanceType: 
+        Ref: InstanceTypeBackend
+      KeyName: 
+        Ref: KeyName
+      SecurityGroupIds: 
+        - Ref: AiHealthBackendEC2SecurityGroup
+      ImageId: 
+        Ref: AMIBackend
+      SubnetId: 
+        Ref: AiHealthPublicSubnet2
+      Tags:
+        - Key: Name
+          Value: AiHealthBackendEC2Instance
 
   # AiHealthRDSInstance:
   #   Type: AWS::RDS::DBInstance
@@ -300,7 +350,11 @@ Outputs:
     Description: Instance ID of the newly created EC2 instance
     Value: 
       Ref: AiHealthEC2Instance
-
+      
+  BackendInstanceId:
+    Description: Instance ID of the newly created EC2 Backend instance
+    Value: 
+      Ref: AiHealthBackendEC2Instance
   # RDSEndpoint:
   #   Description: Endpoint of the RDS instance
   #   Value: 
