@@ -79,9 +79,9 @@ nav {
 }
 .logo .logo-name {
   color: #333;
-  font-size: 22px;
-  font-weight: 500;
-  padding: 0px 20px;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 10px 20px;
 }
 nav .sidebar {
   position: fixed;
