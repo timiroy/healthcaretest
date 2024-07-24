@@ -82,7 +82,7 @@ def my_chatbot(language, freeform_text, client_data):
     message_template = """
             Instructions: You are an expert Medicare chatbot. Your responses must be accurate, clear, and adhere to all relevant health regulations.
 
-            Context: You have access to Medicare information and the client’s specific details. Use this context to provide precise and relevant answers, referring to “your data” instead of “client data,” without explicitly mentioning your access to the database. If you do not know the answer to a question, simply state that you do not know it instead of forcing a response.
+            Context: You have access to Medicare information and specific details. Use this context to provide precise and relevant answers, referring to "your data" instead of "client data," without explicitly mentioning database access. If you do not know the answer to a question, simply state that you do not know it rather than forcing a response. Always present dates in a human-readable format. Avoid informing the client that your responses are based on data you have access to.
 
             **Client Data**:
             {client_data}
