@@ -332,6 +332,59 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+  async function patientProfile(profileContainer) {
+    const url = `http://13.48.48.198/v1/auth/me`;
+
+    try {
+      const response = await fetch(url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const patientData = await response.json();
+      console.log(patientData);
+      if (!patientData) {
+        console.error("Patient data not found.");
+        return;
+      }
+
+      // const template = document.getElementById("profileTemplate").content;
+
+      const profileDetail = document.querySelector(".profileDetails");
+
+      // Populate the template with lab result data
+      profileDetail.querySelector(
+        ".patientName"
+      ).textContent = `${patientData?.first_name} ${patientData?.last_name}`;
+      profileDetail.querySelector(".patientEmail").textContent =
+        patientData?.email;
+      profileDetail.querySelector(".patientNumber").textContent =
+        patientData?.phone_number;
+      profileDetail.querySelector(".patientDOB").textContent = new Date(
+        patientData?.date_of_birth
+      ).toLocaleDateString("en-US", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      });
+      profileDetail.querySelector(".patientGender").textContent =
+        patientData?.gender;
+      profileDetail.querySelector(".patientAddress").textContent =
+        patientData?.address;
+      const profileImg = profileDetail.querySelector(
+        ".profileImgConttainer img"
+      );
+      profileImg.src = patientData?.profile_image;
+      profileImg.alt = `Image of ${patientData?.first_name} ${patientData?.last_name}`;
+
+      // Append the populated template to the container
+      profileContainer.appendChild(profileDetail);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   async function loadContent(url) {
     try {
       const response = await fetch(url);
@@ -344,6 +397,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const prescriptionContainer = mainContent.querySelector(
         ".prescription-container"
       );
+      const profileContainer = mainContent.querySelector(".profile-container");
       const dashboardContainer = mainContent.querySelector(".dashboard");
       const billingsContainer = mainContent.querySelector(".billings-table");
 
@@ -351,6 +405,7 @@ document.addEventListener("DOMContentLoaded", function () {
       upcomingAppointment(appointmentContainer);
       medications(prescriptionContainer);
       billings(billingsContainer);
+      patientProfile(prescriptionContainer);
     } catch (error) {
       mainContent.innerHTML =
         "<p>Failed to load content. Please try again later.</p>";
