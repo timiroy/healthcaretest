@@ -7,6 +7,7 @@ on:
   push:
     branches:
       - server-and-workflow-deployment
+      - documentation
 
 env:
   AWS_REGION: us-east-1
@@ -47,8 +48,10 @@ jobs:
             --stack-name ${{ env.STACK_NAME }} \
             --parameter-overrides \
               InstanceType=t2.micro \
+              InstanceTypeBackend=t2.micro \
               KeyName=AiHealth \
               AMI=${{ secrets.AMI }} \
+              AMIBackend=${{ secrets.AMIBackend }} \
               DBUsername=${{ secrets.DBUsername }} \
               DBPassword=${{ secrets.DBPassword }} \
               DBAllocatedStorage=20 \
@@ -66,8 +69,10 @@ jobs:
             --template-body file://server-deployment/server.yaml \
             --parameters \
               ParameterKey=InstanceType,ParameterValue=t2.micro \
+              ParameterKey=InstanceTypeBackend,ParameterValue=t2.micro \
               ParameterKey=KeyName,ParameterValue=AiHealth \
               ParameterKey=AMI,ParameterValue=${{ secrets.AMI }} \
+              ParameterKey=AMIBackend,ParameterValue=${{ secrets.AMIBackend }} \
               ParameterKey=DBUsername,ParameterValue=${{ secrets.DBUsername }} \
               ParameterKey=DBPassword,ParameterValue=${{ secrets.DBPassword }} \
               ParameterKey=DBAllocatedStorage,ParameterValue=20 \
