@@ -4,7 +4,7 @@ integrate AI in health site chatbot
 ## System Architecture Overview
 
 This document provides an overview of the architecture for our web application, which integrates a chatbot powered by AWS Bedrock.This architecture leverages AWS services to provide a secure, scalable, and efficient environment for deploying a web application with a chatbot. JWT is used for robust user authentication, ensuring that only authorized users can access protected resources.
- ![WEBAPP Workflow](./Assets/jwt.png)
+ ![WEBAPP Workflow](./Assets/jwt.PNG)
 ## Components
 
 ### 1. Web Application
