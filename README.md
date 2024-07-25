@@ -111,7 +111,7 @@ You need to configure the following secrets in your GitHub repository for the wo
 2. **Navigate to EC2**: In the AWS Console, open the EC2 Dashboard by selecting "EC2" from the Services menu.
 
 3. **Find AMIs**:
-   - In the EC2 Dashboard, look for the "Images" section in the left-hand menu and select "AMIs."
+   - In the EC2 Dashboard, look for the "Images" section in the left-hand menu and select "AMI Catalog."
    - Use the search bar or filter options to find the AMI you want. You can filter by platform (e.g., Amazon Linux, Ubuntu) or other criteria.
 
 4. **Copy the AMI ID**:
