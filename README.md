@@ -102,6 +102,24 @@ You need to configure the following secrets in your GitHub repository for the wo
    Add these parameters as secrets in the same way as the AWS credentials.
 ![secrets](./Assets/secrets.PNG)
 
+## How to Obtain the AMI ID
+
+### **AWS Management Console**
+
+1. **Login to the AWS Management Console**: Go to [AWS Management Console](https://aws.amazon.com/console/).
+
+2. **Navigate to EC2**: In the AWS Console, open the EC2 Dashboard by selecting "EC2" from the Services menu.
+
+3. **Find AMIs**:
+   - In the EC2 Dashboard, look for the "Images" section in the left-hand menu and select "AMIs."
+   - Use the search bar or filter options to find the AMI you want. You can filter by platform (e.g., Amazon Linux, Ubuntu) or other criteria.
+
+4. **Copy the AMI ID**:
+   - Select the AMI you want to use.
+   - Find the "AMI ID" in the description tab or details section. Copy this ID for use in your CloudFormation template.
+
+![AMI](./Assets/ami.PNG)
+
 ## Workflow Overview
 
 The workflow will:
@@ -163,3 +181,5 @@ The workflow deploys:
 ## Optional
 
 - **RDS Instance**: Not included by default. Uncomment the relevant sections in the template to deploy an RDS instance.
+
+
