@@ -1,5 +1,4 @@
-# integrate-AI-in-health-site-chatbot
-integrate AI in health site chatbot
+# Integrate AI in health site chatbot
 
 ## System Architecture Overview
 
@@ -63,6 +62,7 @@ User authentication is handled using JWT. The workflow ensures secure communicat
 - **Chatbot and AWS Bedrock**: The chatbot interacts with AWS Bedrock for AI processing, ensuring seamless and intelligent user interactions.
 - **Backend and Database**: The backend communicates with the database to store and retrieve data securely.
 
+
 # Deployment Workflow for AIHealthServer
 
 This repository includes a GitHub Actions workflow for deploying and managing an AWS CloudFormation stack, along with setting up an EC2 instance with a Streamlit application. Follow the steps below to successfully deploy the workflow.
@@ -100,6 +100,7 @@ You need to configure the following secrets in your GitHub repository for the wo
    - **`DBPassword`**: The database password.
 
    Add these parameters as secrets in the same way as the AWS credentials.
+![secrets](./Assets/secrets.PNG)
 
 ## Workflow Overview
 
