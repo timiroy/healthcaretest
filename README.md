@@ -182,4 +182,16 @@ The workflow deploys:
 
 - **RDS Instance**: Not included by default. Uncomment the relevant sections in the template to deploy an RDS instance.
 
+## Usage
 
+- Access the Web App at `http://your-web-app-url`.
+- Interact with the Chatbot through the Web App.
+- Monitor and manage the Backend services and Database through the AWS Management Console.
+
+## Contributing
+
+Contributions are welcome! Please fork the repository and submit a pull request.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
