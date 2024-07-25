@@ -6,8 +6,7 @@ on:
       - main
   push:
     branches:
-      - server-and-workflow-deployment
-      # - documentation
+      - main
 
 env:
   AWS_REGION: us-east-1
