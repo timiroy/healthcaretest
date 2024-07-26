@@ -28,8 +28,8 @@ let phoneInput;
 let passwordSignUpInput;
 let confirmPasswordInput;
 
-const url = `http://13.48.48.198/v1/auth/signin`;
-const signUp_url = `http://13.48.48.198/v1/auth/signup`;
+const url = `http://18.117.225.244/v1/auth/signin`;
+const signUp_url = `http://18.117.225.244/v1/auth/signup`;
 
 async function loginAuth() {
   console.log("login   .....");
