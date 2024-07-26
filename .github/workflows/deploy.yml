@@ -9,7 +9,7 @@ on:
       - main
 
 env:
-  AWS_REGION: us-east-1
+  AWS_REGION: us-east-2
   STACK_NAME: AIHealthServerCloudFormationStack
   INSTANCE_ID: MyEC2Instance
   ACTION: create
