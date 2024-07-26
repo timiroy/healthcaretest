@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Billings Page</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../Frontend/css/billings.css" />
+
+    <!-- Boxicons CSS -->
+    <link
+      href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Google Fonts Link For Icons -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,1,0"
+    />
+  </head>
+  <body>
+    <div class="billing-content">
+        <div class="bills-container">
+            <h3>Recent Billings</h3>
+            <div class="scrollable-table-container">
+              <table class="billings-table billings-page">
+                <thead>
+                  <tr class="headings-row">
+                    <th class="service-header">Service</th>
+                    <th class="provider-header">Provider</th>
+                    <!-- <th class="date-header">Date</th> -->
+                    <th class="status-header">Status</th>
+                    <th class="ammount-header">Amount</th>
+                  </tr>
+                </thead>
+  
+                <template id="billingsDashboardTemplate">
+                  <tbody>
+                    <tr class="billings-row">
+                      <td class="service-header service-title">
+                        Full body checkup
+                      </td>
+                      <td class="provider-header">
+                        <img
+                          src="../../Assets/bearded-doctor-glasses.jpg"
+                          alt=""
+                        />Dr Jordan
+                      </td>
+                      <!-- <td class="date-header date-text">17 Dec, 2023</td> -->
+                      <td class="status-header">
+                        <p class="status pending">Pending</p>
+                      </td>
+                      <td class="amount-header">
+                        <strong class="amount-text"> $128.90 </strong>
+                      </td>
+                    </tr>
+                  </tbody>
+                </template>
+              </table>
+            </div>
+    </div>
+  </body>
+</html>

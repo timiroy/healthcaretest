@@ -1,0 +1,330 @@
+body {
+  height: 100%;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.dashboard {
+  margin-top: 70px;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 90px);
+  overflow: hidden;
+}
+
+.top-section {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.bottom-section {
+  display: flex;
+  flex: 1;
+}
+
+.medical-history,
+.health-overview .appointments,
+.right-section {
+  flex: 1;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  margin-right: 20px;
+  overflow-y: auto;
+}
+
+.left-section {
+  flex: 1;
+  border-radius: 10px;
+  margin-right: 20px;
+  overflow-y: auto;
+}
+
+.medical-history,
+.health-overview,
+.prescription {
+  height: 180px;
+  display: flex;
+  flex-direction: column;
+}
+
+.medical-history h3,
+.appointments h3,
+.health-overview h3,
+.prescription h3 {
+  padding-bottom: 10px;
+  color: #494949;
+  margin: 0 -10px;
+  padding: 10px 10px 10px 10px;
+  border-bottom: 1px solid #cdcdcd;
+}
+
+.activities,
+.appointments-container {
+  flex: 1;
+  background: white;
+  padding: 10px 12px;
+  border-radius: 8px;
+  overflow-y: auto;
+}
+
+.activities {
+  margin-top: 10px;
+}
+
+.history-card {
+  flex-direction: column;
+  gap: 3px;
+}
+
+.condition-name {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.history-note,
+.diagnosis-date {
+  font-size: 12px;
+  color: #494949;
+}
+
+.activity-card,
+.history-card {
+  background: white;
+  padding: 10px 12px;
+  margin: 0 -12px 10px -12px;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #cdcdcd;
+}
+
+.activity-details {
+  display: flex;
+  align-items: center;
+}
+
+.activity-img img,
+.doctor-img img,
+.hour img {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+}
+
+.details,
+.condition-rate,
+.prescription-name,
+.usage,
+.quantity {
+  margin-left: 10px;
+}
+
+.activity-name,
+.appointment-title,
+.doctor-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: black;
+}
+
+.activity-date,
+.activity-info,
+.doctor-title,
+.appointment-schedule,
+.appointment-date,
+.appointment-time,
+.prescription-card .usage {
+  font-size: 12px;
+  color: #707070;
+}
+
+.activity-info {
+  width: 70%;
+}
+
+.lab-info {
+  font-size: 14px;
+}
+
+.appointments {
+  flex: 1;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+}
+
+.appointments h3 {
+  margin-bottom: 10px;
+}
+
+.appointment-card {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: 3px solid #faf9f6;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.appointment-title {
+  padding-bottom: 5px;
+}
+
+.appointment-doctor {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.doctor-details {
+  margin-left: 10px;
+}
+
+.doctor-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: black;
+}
+
+.doctor-title {
+  font-size: 12px;
+  color: #707070;
+}
+
+.appointment-schedule {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+  gap: 10px;
+}
+
+.appointment-date {
+  background-color: #4070f4;
+  color: white;
+  padding: 20px 35px;
+  height: 30px;
+  width: 150px;
+  border-radius: 20px;
+}
+
+.appointment-date,
+.appointment-time {
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+  font-size: 12px;
+}
+
+.appointment-time i {
+  margin-right: 5px;
+  color: #4070f4;
+  font-size: 20px;
+}
+
+.left-section .health-overview,
+.left-section .prescription,
+.right-section {
+  flex: 1;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 20px;
+  overflow-y: auto;
+}
+
+.health-overview {
+  margin-bottom: 20px;
+}
+
+.health-overview .container {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.health-card {
+  border: 3px solid #faf9f6;
+  border-radius: 10px;
+  padding: 10px 10px;
+}
+
+.health-condition {
+  display: flex;
+}
+
+.condition {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.rate {
+  color: #4070f4;
+  font-size: 8px;
+}
+
+.value {
+  padding-top: 10px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.health-icon img {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+}
+
+.prescription-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: space-evenly;
+  height: 70%;
+}
+
+.prescription-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border: 3px solid #faf9f6;
+  border-radius: 10px;
+  padding: 15px 0px;
+}
+
+.lab-card {
+  border: 3px solid #faf9f6;
+  border-radius: 10px;
+  padding: 15px 0px;
+  margin: 0px 3px;
+  margin-bottom: 10px;
+}
+
+.prescription-name {
+  font-weight: 500;
+}
+
+.dosage {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 10px;
+}
+
+.hour {
+  margin: 0px 10px;
+  display: flex;
+  gap: 5px;
+}
+
+.hour span {
+  font-size: 10px;
+}
+
+.dosage-hour .quantity {
+  font-size: 10px;
+  padding-left: 20px;
+  margin-top: 5px;
+}

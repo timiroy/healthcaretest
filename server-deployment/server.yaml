@@ -1,0 +1,363 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: CloudFormation template to create a VPC, subnets, an EC2 instance with public IP, security groups, and a MySQL RDS instance.
+
+Parameters:
+  InstanceType:
+    Description: EC2 instance type
+    Type: String
+    Default: t2.micro
+    AllowedValues:
+      - t2.micro
+      - t2.small
+      - t2.medium
+      - t3.micro
+      - t3.small
+      - t3.medium
+    ConstraintDescription: Must be a valid EC2 instance type.
+  InstanceTypeBackend:
+    Description: EC2 instance for Backend type
+    Type: String
+    Default: t2.micro
+    AllowedValues:
+      - t2.micro
+      - t2.small
+      - t2.medium
+      - t3.micro
+      - t3.small
+      - t3.medium
+    ConstraintDescription: Must be a valid EC2 instance type.
+  KeyName:
+    Description: Name of an existing EC2 KeyPair to enable SSH access to the instance
+    Type: AWS::EC2::KeyPair::KeyName
+    ConstraintDescription: Must be the name of an existing EC2 KeyPair.
+
+  AMI:
+    Description: AMI ID for the EC2 instance
+    Type: AWS::EC2::Image::Id
+    ConstraintDescription: Must be a valid AMI ID.
+  AMIBackend:
+    Description: AMI ID for the EC2 Backend instance
+    Type: AWS::EC2::Image::Id
+    ConstraintDescription: Must be a valid AMI ID.
+  DBUsername:
+    Description: The database admin account username
+    Type: String
+    NoEcho: true
+
+  DBPassword:
+    Description: The database admin account password
+    Type: String
+    NoEcho: true
+    MinLength: 8
+    MaxLength: 41
+    AllowedPattern: '[a-zA-Z0-9]*'
+    ConstraintDescription: Must consist of alphanumeric characters only and be between 8 and 41 characters in length.
+
+  DBAllocatedStorage:
+    Description: The allocated storage size for the RDS instance (in GB)
+    Type: Number
+    Default: 20
+    MinValue: 5
+    MaxValue: 1000
+    ConstraintDescription: Must be between 5 and 1000 GB.
+
+  DBInstanceClass:
+    Description: The compute and memory capacity of the RDS instance
+    Type: String
+    Default: db.t2.micro
+    AllowedValues:
+      - db.t2.micro
+      - db.t2.small
+      - db.t2.medium
+      - db.t3.micro
+      - db.t3.small
+      - db.t3.medium
+    ConstraintDescription: Must be a valid RDS instance class.
+
+Resources:
+  AiHealthVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: AiHealthVPC
+
+  AiHealthInternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: AiHealthInternetGateway
+
+  AttachGateway:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: 
+        Ref: AiHealthVPC
+      InternetGatewayId: 
+        Ref: AiHealthInternetGateway
+
+  AiHealthPublicSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: 
+        Ref: AiHealthVPC
+      CidrBlock: 10.0.1.0/24
+      MapPublicIpOnLaunch: true
+      AvailabilityZone: us-east-1a
+      Tags:
+        - Key: Name
+          Value: AiHealthPublicSubnet1
+
+  AiHealthPublicSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: 
+        Ref: AiHealthVPC
+      CidrBlock: 10.0.3.0/24
+      MapPublicIpOnLaunch: true
+      AvailabilityZone: us-east-1b
+      Tags:
+        - Key: Name
+          Value: AiHealthPublicSubnet2
+
+  AiHealthPrivateSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: 
+        Ref: AiHealthVPC
+      CidrBlock: 10.0.2.0/24
+      AvailabilityZone: us-east-1a
+      Tags:
+        - Key: Name
+          Value: AiHealthPrivateSubnet1
+
+  AiHealthPrivateSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: 
+        Ref: AiHealthVPC
+      CidrBlock: 10.0.4.0/24
+      AvailabilityZone: us-east-1b
+      Tags:
+        - Key: Name
+          Value: AiHealthPrivateSubnet2
+
+  AiHealthRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: 
+        Ref: AiHealthVPC
+      Tags:
+        - Key: Name
+          Value: AiHealthRouteTable
+
+  AiHealthRoute:
+    Type: AWS::EC2::Route
+    DependsOn: AttachGateway
+    Properties:
+      RouteTableId: 
+        Ref: AiHealthRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: 
+        Ref: AiHealthInternetGateway
+
+  PublicSubnetRouteTableAssociation1:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: 
+        Ref: AiHealthPublicSubnet1
+      RouteTableId: 
+        Ref: AiHealthRouteTable
+
+  PublicSubnetRouteTableAssociation2:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: 
+        Ref: AiHealthPublicSubnet2
+      RouteTableId: 
+        Ref: AiHealthRouteTable
+
+  AiHealthEC2SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties: 
+      GroupDescription: Enable SSH access via port 22, HTTP via port 80, HTTPS via port 443, and custom port 8501
+      VpcId: 
+        Ref: AiHealthVPC
+      SecurityGroupIngress: 
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 8501
+          ToPort: 8501
+          CidrIp: 0.0.0.0/0
+
+  AiHealthBackendEC2SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties: 
+      GroupDescription: Enable SSH access via port 22, HTTP via port 80, HTTPS via port 443, and custom port 8501
+      VpcId: 
+        Ref: AiHealthVPC
+      SecurityGroupIngress: 
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+  # AiHealthRDSSecurityGroup:
+  #   Type: AWS::EC2::SecurityGroup
+  #   Properties:
+  #     GroupDescription: Allow MySQL access from EC2 security group
+  #     VpcId: 
+  #       Ref: AiHealthVPC
+  #     SecurityGroupIngress:
+  #       - IpProtocol: tcp
+  #         FromPort: 3306
+  #         ToPort: 3306
+  #         SourceSecurityGroupId: 
+  #           Ref: AiHealthEC2SecurityGroup
+  AiHealthEC2InstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: AiHealthEC2InstanceRole
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess
+        - arn:aws:iam::aws:policy/AmazonBedrockFullAccess
+  AiHealthEC2InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - Ref: AiHealthEC2InstanceRole        
+  AiHealthEC2Instance:
+    Type: AWS::EC2::Instance
+    Properties: 
+      InstanceType: 
+        Ref: InstanceType
+      KeyName: 
+        Ref: KeyName
+      SecurityGroupIds: 
+        - Ref: AiHealthEC2SecurityGroup
+      IamInstanceProfile: 
+        Ref: AiHealthEC2InstanceProfile
+      ImageId: 
+        Ref: AMI
+      SubnetId: 
+        Ref: AiHealthPublicSubnet1
+      Tags:
+        - Key: Name
+          Value: AiHealthEC2Instance
+
+  AiHealthBackendEC2Instance:
+    Type: AWS::EC2::Instance
+    Properties: 
+      InstanceType: 
+        Ref: InstanceTypeBackend
+      KeyName: 
+        Ref: KeyName
+      SecurityGroupIds: 
+        - Ref: AiHealthBackendEC2SecurityGroup
+      ImageId: 
+        Ref: AMIBackend
+      SubnetId: 
+        Ref: AiHealthPublicSubnet2
+      Tags:
+        - Key: Name
+          Value: AiHealthBackendEC2Instance
+
+  # AiHealthRDSInstance:
+  #   Type: AWS::RDS::DBInstance
+  #   Properties: 
+  #     DBInstanceIdentifier: AiHealth
+  #     AllocatedStorage: 
+  #       Ref: DBAllocatedStorage
+  #     DBInstanceClass: 
+  #       Ref: DBInstanceClass
+  #     Engine: mysql
+  #     EngineVersion: 8.0.35
+  #     MasterUsername: 
+  #       Ref: DBUsername
+  #     MasterUserPassword: 
+  #       Ref: DBPassword
+  #     VPCSecurityGroups: 
+  #       - Ref: AiHealthRDSSecurityGroup
+  #     DBSubnetGroupName: 
+  #       Ref: AiHealthDBSubnetGroup
+  #     PubliclyAccessible: false
+
+  # AiHealthDBSubnetGroup:
+  #   Type: AWS::RDS::DBSubnetGroup
+  #   Properties:
+  #     DBSubnetGroupDescription: Subnet group for RDS instance
+  #     SubnetIds: 
+  #       - Ref: AiHealthPrivateSubnet1
+  #       - Ref: AiHealthPrivateSubnet2
+  #     DBSubnetGroupName: AiHealth-db-subnet-group
+
+Outputs:
+  VPCId:
+    Description: VPC ID
+    Value: 
+      Ref: AiHealthVPC
+
+  PublicSubnetId1:
+    Description: Public Subnet ID in AZ us-east-1a
+    Value: 
+      Ref: AiHealthPublicSubnet1
+
+  PublicSubnetId2:
+    Description: Public Subnet ID in AZ us-east-1b
+    Value: 
+      Ref: AiHealthPublicSubnet2
+
+  PrivateSubnetId1:
+    Description: Private Subnet ID in AZ us-east-1a
+    Value: 
+      Ref: AiHealthPrivateSubnet1
+
+  PrivateSubnetId2:
+    Description: Private Subnet ID in AZ us-east-1b
+    Value: 
+      Ref: AiHealthPrivateSubnet2
+
+  InstanceId:
+    Description: Instance ID of the newly created EC2 instance
+    Value: 
+      Ref: AiHealthEC2Instance
+      
+  BackendInstanceId:
+    Description: Instance ID of the newly created EC2 Backend instance
+    Value: 
+      Ref: AiHealthBackendEC2Instance
+  # RDSEndpoint:
+  #   Description: Endpoint of the RDS instance
+  #   Value: 
+  #     Fn::GetAtt: 
+  #       - AiHealthRDSInstance
+  #       - Endpoint.Address

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Appointments</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../Frontend/css/appointment.css" />
+    <link rel="stylesheet" href="../css/sidebar.css" />
+
+    <!-- Boxicons CSS -->
+    <link
+      href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Google Fonts Link For Icons -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,1,0"
+    />
+  </head>
+  <body>
+    <div class="appointment-content" id="appointments">
+      <div class="appointments-page">
+        <h2>Upcoming Appointments</h2>
+
+        <div class="appointments-container">
+          <template id="appointmentCardTemplate">
+            <div class="appointment-card">
+              <div>
+                <p class="appointment-title">Surgery Preparation</p>
+
+                <div class="appointment-doctor">
+                  <div class="doctor-img">
+                    <img
+                      src="../../Assets/bearded-doctor-glasses.jpg"
+                      alt="Doctor"
+                    />
+                  </div>
+
+                  <div class="doctor-details">
+                    <h4 class="doctor-name">Dr. Damian Lewis</h4>
+                    <p class="doctor-title">Cardiologist</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="appointment-schedule">
+                <div class="appointment-date">
+                  <span>June 12, 2023</span>
+                </div>
+
+                <div class="appointment-time">
+                  <i class="bx bx-stopwatch"></i>
+                  <span>9.00 AM - 10.00AM</span>
+                </div>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <script src="../scripts/appointment.js"></script>
+  </body>
+</html>
