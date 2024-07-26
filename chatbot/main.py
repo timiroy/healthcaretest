@@ -8,7 +8,7 @@ from langchain_community.chat_models import BedrockChat
 from langchain.prompts import PromptTemplate
 
 # Set page config at the very beginning
-st.set_page_config(page_title="🦙💬 MEDICARE Chatbot")
+st.set_page_config(page_title="🦙💬 MEDITEST Chatbot")
 # Function to get the bearer token from URL parameters
 def get_access_token_from_url():
     # Retrieve query parameters
