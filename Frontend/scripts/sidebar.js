@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const date = new Date(dateString);
 
         const day = date.getUTCDate();
-        const month = date.toLocaleString("en-US", {
+        const month = date.toUTCString("en-US", {
           month: "long",
           timeZone: "UTC",
         });
