@@ -125,6 +125,7 @@ document.addEventListener("DOMContentLoaded", function () {
         labCard.querySelector(".lab-date").textContent = new Date(
           appointment?.test_date
         ).toLocaleDateString("en-US", {
+          timeZone: "UTC",
           day: "numeric",
           month: "long",
           year: "numeric",
@@ -147,6 +148,7 @@ document.addEventListener("DOMContentLoaded", function () {
         ).textContent = `Diagnosed on ${new Date(
           appointment?.diagnosis_date
         ).toLocaleDateString("en-US", {
+          timeZone: "UTC",
           day: "numeric",
           month: "long",
           year: "numeric",
@@ -371,6 +373,7 @@ document.addEventListener("DOMContentLoaded", function () {
       profileDetail.querySelector(".patientDOB").textContent = new Date(
         patientData?.date_of_birth
       ).toLocaleDateString("en-US", {
+        timeZone: "UTC",
         day: "numeric",
         month: "short",
         year: "numeric",
