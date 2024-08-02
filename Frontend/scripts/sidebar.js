@@ -122,14 +122,13 @@ document.addEventListener("DOMContentLoaded", function () {
         // Populate the template with lab result data
         labCard.querySelector(".lab-info").textContent = appointment?.notes;
         labCard.querySelector(".lab-test").textContent = appointment?.test_name;
-        labCard.querySelector(".lab-date").textContent = "Hello";
-        // labCard.querySelector(".lab-date").textContent = new Date(
-        //   appointment?.test_date
-        // ).toLocaleDateString("en-US", {
-        //   day: "numeric",
-        //   month: "long",
-        //   year: "numeric",
-        // });
+        labCard.querySelector(".lab-date").textContent = new Date(
+          appointment?.test_date
+        ).toLocaleDateString("en-US", {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        });
 
         // Append the populated template to the container
         dashboardLabActivity.appendChild(labCard);
@@ -169,12 +168,14 @@ document.addEventListener("DOMContentLoaded", function () {
           "Cardiologist";
         appointmentCard.querySelector(".appointment-date span").textContent =
           new Date(appointment?.appointment_date).toLocaleDateString("en-US", {
+            timeZone: "UTC",
             day: "numeric",
             month: "short",
             year: "numeric",
           });
         appointmentCard.querySelector(".appointment-time span").textContent =
           new Date(appointment?.appointment_date).toLocaleTimeString([], {
+            timeZone: "UTC",
             hour: "2-digit",
             minute: "2-digit",
           });
@@ -225,12 +226,17 @@ document.addEventListener("DOMContentLoaded", function () {
           "Cardiologist";
         appointmentCard.querySelector(".appointment-date span").textContent =
           new Date(appointment?.appointment_date).toLocaleDateString("en-US", {
+            timeZone: "UTC",
             day: "numeric",
             month: "short",
             year: "numeric",
           });
         appointmentCard.querySelector(".appointment-time span").textContent =
-          new Date(appointment?.appointment_date).toLocaleTimeString();
+          new Date(appointment?.appointment_date).toLocaleTimeString([], {
+            timeZone: "UTC",
+            hour: "2-digit",
+            minute: "2-digit",
+          });
 
         const doctorImg = appointmentCard.querySelector(".doctor-img img");
         doctorImg.src = "../../Assets/bearded-doctor-glasses.jpg";
