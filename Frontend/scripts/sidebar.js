@@ -122,18 +122,13 @@ document.addEventListener("DOMContentLoaded", function () {
         // Populate the template with lab result data
         labCard.querySelector(".lab-info").textContent = appointment?.notes;
         labCard.querySelector(".lab-test").textContent = appointment?.test_name;
-        const dateString = appointment?.test_date;
-        const date = new Date(dateString);
-
-        const day = date.getUTCDate();
-        const month = date.toUTCString("en-US", {
+        labCard.querySelector(".lab-date").textContent = new Date(
+          appointment?.test_date
+        ).toLocaleDateString("en-US", {
+          day: "numeric",
           month: "long",
-          timeZone: "UTC",
+          year: "numeric",
         });
-        const year = date.getUTCFullYear();
-
-        const formattedDate = `${month} ${day}, ${year}`;
-        labCard.querySelector(".lab-date").textContent = formattedDate;
 
         // Append the populated template to the container
         dashboardLabActivity.appendChild(labCard);
