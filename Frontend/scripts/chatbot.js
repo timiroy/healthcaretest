@@ -11,11 +11,11 @@ function toggleMaximize() {
   }
 }
 
-function minimizeChatbot() {
-  const popup = document.getElementById("chatbot-popup");
-  popup.classList.toggle("minimized");
-  isMaximized = false; 
-}
+// function minimizeChatbot() {
+//   const popup = document.getElementById("chatbot-popup");
+//   popup.classList.toggle("minimized");
+//   isMaximized = false; 
+// }
 
 function toggleChatbot() {
   const popup = document.getElementById("chatbot-popup");

@@ -11,6 +11,7 @@ logout.addEventListener("click", () => {
 console.log(token);
 
 if (token === undefined) {
+  console.log("Don't bypass");
   window.location.href = "/index.html";
 }
 
@@ -38,6 +39,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const url = `http://13.48.48.198/v1/auth/me`;
     // const patientData = JSON.parse(sessionStorage.getItem("patientDetails"));
+    // console.log(patientData);
     try {
       const response = await fetch(url, {
         headers: {
@@ -46,6 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
       });
 
       const patientData = await response.json();
+      console.log(patientData);
       if (!patientData) {
         console.error("Dashboard data not found.");
         return;
@@ -74,6 +77,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const billingsTemplate =
         document.getElementById("billingsTemplate").content;
+
+      console.log(patientData.billings);
 
       patientData.billings.forEach(async (bill) => {
         const billRow = document.importNode(billingsTemplate, true);
@@ -214,6 +219,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   async function upcomingAppointment(appointmentContainer) {
+    console.log(appointmentContainer);
     const url = `http://13.48.48.198/v1/appointments/?patient_id=${userData.user_id}`;
 
     try {
@@ -273,6 +279,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   async function medications(prescriptionContainer) {
+    console.log(prescriptionContainer);
     const url = `http://13.48.48.198/v1/medications/?patient_id=${userData.user_id}`;
 
     try {
@@ -318,6 +325,7 @@ document.addEventListener("DOMContentLoaded", function () {
       });
 
       const billingsData = await response.json();
+      console.log(billingsData);
 
       if (!billingsData || !Array.isArray(billingsData.billings)) {
         console.error("No billings found.");
@@ -327,6 +335,8 @@ document.addEventListener("DOMContentLoaded", function () {
       const template = document.getElementById(
         "billingsDashboardTemplate"
       ).content;
+
+      console.log(billingsData.billings);
 
       billingsData.billings.forEach((bill) => {
         const billRow = document.importNode(template, true);
@@ -372,6 +382,7 @@ document.addEventListener("DOMContentLoaded", function () {
       });
 
       const patientData = await response.json();
+      console.log(patientData);
       if (!patientData) {
         console.error("Patient data not found.");
         return;
@@ -418,6 +429,7 @@ document.addEventListener("DOMContentLoaded", function () {
     try {
       const response = await fetch(url);
       const content = await response.text();
+      console.log(content);
       mainContent.innerHTML = content;
       const appointmentContainer = mainContent.querySelector(
         ".appointments-container"
