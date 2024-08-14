@@ -101,6 +101,7 @@ document.addEventListener("DOMContentLoaded", function () {
         billRow.querySelector(
           ".provider"
         ).textContent = `Dr ${bill?.doctor.first_name} ${bill?.doctor.last_name}`;
+        console.log(billRow.querySelector(".provider").textContent);
 
         // Append the populated template to the container
         dashboardBillContainer.appendChild(billRow);
@@ -229,7 +230,7 @@ document.addEventListener("DOMContentLoaded", function () {
           appointment?.reason_for_appointment;
         appointmentCard.querySelector(
           ".doctor-name"
-        ).textContent = `Dr ${appointment?.doctor.first_name} ${appointment?.doctor.last_name}`;
+        ).textContent = `${appointment?.doctor.first_name} ${appointment?.doctor.last_name}`;
         appointmentCard.querySelector(
           ".doctor-title"
         ).textContent = `${appointment?.doctor.specialty}`;
@@ -249,7 +250,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const doctorImg = appointmentCard.querySelector(".doctor-img img");
         doctorImg.src = "../../Assets/bearded-doctor-glasses.jpg";
-        doctorImg.alt = `Image of Dr ${appointment?.doctor.first_name} ${appointment?.doctor.last_name}`;
+        doctorImg.alt = `Image of ${appointment?.doctor.first_name} ${appointment?.doctor.last_name}`;
 
         // Append the populated template to the container
         appointmentContainer.appendChild(appointmentCard);
