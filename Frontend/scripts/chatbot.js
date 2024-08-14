@@ -10,22 +10,21 @@ function toggleMaximize() {
     isMaximized = true;
   }
 }
-
-function minimizeChatbot() {
-  const popup = document.getElementById("chatbot-popup");
-  const chatIcon = document.getElementById("chat-icon");
-
-  popup.classList.add("minimized");
-  popup.style.display = "none"; 
-  chatIcon.style.display = "block"; 
-}
+let isChatbotMinimized = false;
 
 function toggleChatbot() {
   const popup = document.getElementById("chatbot-popup");
-  popup.style.display = popup.style.display === "none" ? "flex" : "none";
-
-  if (popup.style.display === "flex") {
-    setIframeToken(); // Ensure iframe src is set when opening the popup
+  
+  if (isChatbotMinimized) {
+    popup.style.display = "flex";
+    isChatbotMinimized = false;
+  } else if (popup.style.display === "flex") {
+    // Minimize the chatbot instead of closing it
+    popup.style.display = "none";
+    isChatbotMinimized = true;
+  } else {
+    popup.style.display = "flex";
+    setIframeToken(); // This keeps the session active without restarting the prompt
   }
 }
 
