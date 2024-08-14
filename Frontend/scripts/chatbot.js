@@ -13,8 +13,11 @@ function toggleMaximize() {
 
 function minimizeChatbot() {
   const popup = document.getElementById("chatbot-popup");
-  popup.classList.toggle("minimized");
-  isMaximized = false; 
+  const chatIcon = document.getElementById("chat-icon");
+
+  popup.classList.add("minimized");
+  popup.style.display = "none"; 
+  chatIcon.style.display = "block"; 
 }
 
 function toggleChatbot() {
