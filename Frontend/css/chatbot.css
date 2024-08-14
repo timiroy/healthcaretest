@@ -42,7 +42,19 @@
 .maximize-btn {
   color: #007bff; /* Blue color for the maximize button */
 }
-
+.minimized {
+  height: 50px; 
+  color: #fff;
+}
+.chatbot-popup.minimized {
+  height: 50px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #007bff;
+  color: #fff;
+}
 .chatbot-toggle-btn {
   position: fixed;
   bottom: 20px;
