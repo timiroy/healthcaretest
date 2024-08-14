@@ -23,11 +23,11 @@ function toggleChatbot() {
 
   if (popup.style.display === "none" || popup.style.display === "") {
     popup.style.display = "flex";
-    chatIcon.style.display = "none"; // Hide chat icon when popup is open
-    setIframeToken(); // Ensure iframe src is set when opening the popup
+    chatIcon.style.display = "none"; 
+    setIframeToken();
   } else {
     popup.style.display = "none";
-    chatIcon.style.display = "block"; // Show chat icon when popup is closed
+    chatIcon.style.display = "block"; 
   }
 }
 

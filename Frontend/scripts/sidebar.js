@@ -193,14 +193,14 @@ document.addEventListener("DOMContentLoaded", function () {
           ".doctor-title"
         ).textContent = `${appointment?.doctor.specialty}`;
         appointmentCard.querySelector(".appointment-date span").textContent =
-          new Date(appointment?.appointment_date).toLocaleDateString("en-US", {
+          new Date(appointment?.next_appointment_date).toLocaleDateString("en-US", {
             timeZone: "UTC",
             day: "numeric",
             month: "short",
             year: "numeric",
           });
         appointmentCard.querySelector(".appointment-time span").textContent =
-          new Date(appointment?.appointment_date).toLocaleTimeString([], {
+          new Date(appointment?.next_appointment_date).toLocaleTimeString([], {
             timeZone: "UTC",
             hour: "2-digit",
             minute: "2-digit",
