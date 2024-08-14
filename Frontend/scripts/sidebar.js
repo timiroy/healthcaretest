@@ -98,6 +98,9 @@ document.addEventListener("DOMContentLoaded", function () {
             ? "#006b21"
             : "black";
         billRow.querySelector(".service-title").textContent = bill?.title;
+        billRow.querySelector(
+          ".provider"
+        ).textContent = `Dr ${bill?.doctor.first_name} ${bill?.doctor.last_name}`;
 
         // Append the populated template to the container
         dashboardBillContainer.appendChild(billRow);
@@ -164,10 +167,12 @@ document.addEventListener("DOMContentLoaded", function () {
         // Populate the template with appointment data
         appointmentCard.querySelector(".appointment-title").textContent =
           appointment?.reason_for_appointment;
-        appointmentCard.querySelector(".doctor-name").textContent =
-          "Dr Shaun Murphy";
-        appointmentCard.querySelector(".doctor-title").textContent =
-          "Cardiologist";
+        appointmentCard.querySelector(
+          ".doctor-name"
+        ).textContent = `Dr ${appointment?.doctor.first_name} ${appointment?.doctor.last_name}`;
+        appointmentCard.querySelector(
+          ".doctor-title"
+        ).textContent = `${appointment?.doctor.specialty}`;
         appointmentCard.querySelector(".appointment-date span").textContent =
           new Date(appointment?.appointment_date).toLocaleDateString("en-US", {
             timeZone: "UTC",
@@ -184,7 +189,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const doctorImg = appointmentCard.querySelector(".doctor-img img");
         doctorImg.src = "../../Assets/bearded-doctor-glasses.jpg";
-        doctorImg.alt = `Image of ${appointment.doctorName}`;
+        doctorImg.alt = `Image of Dr ${appointment?.doctor.first_name} ${appointment?.doctor.last_name}`;
 
         // Append the populated template to the container
         dashboardAppointment.appendChild(appointmentCard);
@@ -222,10 +227,12 @@ document.addEventListener("DOMContentLoaded", function () {
         // Populate the template with appointment data
         appointmentCard.querySelector(".appointment-title").textContent =
           appointment?.reason_for_appointment;
-        appointmentCard.querySelector(".doctor-name").textContent =
-          "Dr Shaun Murphy";
-        appointmentCard.querySelector(".doctor-title").textContent =
-          "Cardiologist";
+        appointmentCard.querySelector(
+          ".doctor-name"
+        ).textContent = `Dr ${appointment?.doctor.first_name} ${appointment?.doctor.last_name}`;
+        appointmentCard.querySelector(
+          ".doctor-title"
+        ).textContent = `${appointment?.doctor.specialty}`;
         appointmentCard.querySelector(".appointment-date span").textContent =
           new Date(appointment?.appointment_date).toLocaleDateString("en-US", {
             timeZone: "UTC",
@@ -242,7 +249,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const doctorImg = appointmentCard.querySelector(".doctor-img img");
         doctorImg.src = "../../Assets/bearded-doctor-glasses.jpg";
-        doctorImg.alt = `Image of ${appointment.doctorName}`;
+        doctorImg.alt = `Image of Dr ${appointment?.doctor.first_name} ${appointment?.doctor.last_name}`;
 
         // Append the populated template to the container
         appointmentContainer.appendChild(appointmentCard);
@@ -332,6 +339,9 @@ document.addEventListener("DOMContentLoaded", function () {
             ? "#006b21"
             : "black";
         billRow.querySelector(".service-title").textContent = bill?.title;
+        billRow.querySelector(
+          ".provider"
+        ).textContent = `Dr ${bill?.doctor.first_name} ${bill?.doctor.last_name}`;
 
         // Append the populated template to the container
         billingsContainer.appendChild(billRow);
