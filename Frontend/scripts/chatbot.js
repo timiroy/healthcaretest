@@ -11,12 +11,23 @@ function toggleMaximize() {
   }
 }
 
+function minimizeChatbot() {
+  const popup = document.getElementById("chatbot-popup");
+  popup.classList.toggle("minimized");
+  isMaximized = false; // Set to false when minimizing
+}
+
 function toggleChatbot() {
   const popup = document.getElementById("chatbot-popup");
-  popup.style.display = popup.style.display === "none" ? "flex" : "none";
+  const chatIcon = document.getElementById("chat-icon");
 
-  if (popup.style.display === "flex") {
+  if (popup.style.display === "none" || popup.style.display === "") {
+    popup.style.display = "flex";
+    chatIcon.style.display = "none"; // Hide chat icon when popup is open
     setIframeToken(); // Ensure iframe src is set when opening the popup
+  } else {
+    popup.style.display = "none";
+    chatIcon.style.display = "block"; // Show chat icon when popup is closed
   }
 }
 
