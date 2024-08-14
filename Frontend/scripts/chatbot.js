@@ -10,13 +10,21 @@ function toggleMaximize() {
     isMaximized = true;
   }
 }
+let isChatbotMinimized = false;
 
 function toggleChatbot() {
   const popup = document.getElementById("chatbot-popup");
-  popup.style.display = popup.style.display === "none" ? "flex" : "none";
-
-  if (popup.style.display === "flex") {
-    setIframeToken(); // Ensure iframe src is set when opening the popup
+  
+  if (isChatbotMinimized) {
+    popup.style.display = "flex";
+    isChatbotMinimized = false;
+  } else if (popup.style.display === "flex") {
+    // Minimize the chatbot instead of closing it
+    popup.style.display = "none";
+    isChatbotMinimized = true;
+  } else {
+    popup.style.display = "flex";
+    setIframeToken(); // This keeps the session active without restarting the prompt
   }
 }
 
@@ -34,6 +42,6 @@ function setIframeToken() {
   const url = `http://54.146.243.168:8501?token=${tokenString}`;
 
   const iframe = document.getElementById("chatbot-frame");
-  console.log("Setting iframe src to:", url);
+  
   iframe.src = url;
 }

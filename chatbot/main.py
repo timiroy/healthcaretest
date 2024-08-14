@@ -123,9 +123,14 @@ def clear_chat_history():
 st.sidebar.button('Clear Chat History', on_click=clear_chat_history)
 
 # Function for generating LLaMA2 response using Amazon Bedrock
-def generate_llama2_response(prompt_input, client_data):
-    response = my_chatbot('en', prompt_input, client_data)
+def generate_llama2_response(conversation_history, client_data):
+    # Combine the entire conversation history into a single input
+    full_prompt = "\n".join(conversation_history)
+    
+    # Generate the response using the full conversation history
+    response = my_chatbot('en', full_prompt, client_data)
     return response['text']
+
 
 # User-provided prompt
 if prompt := st.chat_input():
@@ -137,7 +142,9 @@ if prompt := st.chat_input():
 if st.session_state.messages[-1]["role"] != "assistant":
     with st.chat_message("assistant"):
         with st.spinner("Thinking..."):
-            response = generate_llama2_response(prompt, client_data)
+            # Pass the entire chat history to the model
+            conversation_history = [msg["content"] for msg in st.session_state.messages]
+            response = generate_llama2_response(conversation_history, client_data)
             placeholder = st.empty()
             full_response = ''
             for item in response:
