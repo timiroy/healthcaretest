@@ -11,43 +11,35 @@ function toggleMaximize() {
   }
 }
 
-// function minimizeChatbot() {
-//   const popup = document.getElementById("chatbot-popup");
-//   popup.classList.toggle("minimized");
-//   isMaximized = false; 
-// }
+function minimizeChatbot() {
+  const popup = document.getElementById("chatbot-popup");
+  popup.classList.toggle("minimized");
+  isMaximized = false; 
+}
 
 function toggleChatbot() {
   const popup = document.getElementById("chatbot-popup");
-  const chatIcon = document.getElementById("chat-icon");
+  popup.style.display = popup.style.display === "none" ? "flex" : "none";
 
-  if (popup.style.display === "none" || popup.style.display === "") {
-    popup.style.display = "flex";
-    chatIcon.style.display = "none"; 
-    setIframeToken();
-  } else {
-    popup.style.display = "none";
-    chatIcon.style.display = "block"; 
+  if (popup.style.display === "flex") {
+    setIframeToken(); // Ensure iframe src is set when opening the popup
   }
 }
 
 function setIframeToken() {
   const fullUserDetails = JSON.parse(sessionStorage.getItem("authDetails"));
-  const accessToken = fullUserDetails?.token?.access_token;
-  const refreshToken = fullUserDetails?.token?.refresh_token;
+  const access_token = fullUserDetails?.token.access_token;
+  const refresh_token = fullUserDetails?.token.refresh_token;
 
-  if (accessToken && refreshToken) {
-    const token = {
-      access_token: accessToken,
-      refresh_token: refreshToken,
-    };
+  const token = {
+    access_token,
+    refresh_token,
+  };
 
-    const tokenString = encodeURIComponent(JSON.stringify(token));
-    const url = `http://54.146.243.168:8501?token=${tokenString}`;
+  const tokenString = encodeURIComponent(JSON.stringify(token));
+  const url = `http://54.146.243.168:8501?token=${tokenString}`;
 
-    const iframe = document.getElementById("chatbot-frame");
-    iframe.src = url;
-  } else {
-    console.error("Token not found in session storage.");
-  }
+  const iframe = document.getElementById("chatbot-frame");
+  
+  iframe.src = url;
 }
