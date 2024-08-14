@@ -32,7 +32,6 @@ const url = `http://13.48.48.198/v1/auth/signin`;
 const signUp_url = `http://13.48.48.198/v1/auth/signup`;
 
 async function loginAuth() {
-  console.log("login   .....");
 
   const payload = { email: emailInput, password: passwordInput };
   try {
@@ -57,7 +56,6 @@ async function loginAuth() {
 }
 
 async function signUpAuth() {
-  console.log("signup   .....");
 
   const payload = {
     email: emailSignUpInput,
@@ -96,42 +94,34 @@ formCloseBtn.addEventListener("click", () => home.classList.remove("show"));
 
 emailLogin.addEventListener("change", (e) => {
   emailInput = e.target.value;
-  console.log(emailInput);
 });
 
 passwordLogin.addEventListener("change", (e) => {
   passwordInput = e.target.value;
-  console.log(passwordInput);
 });
 
 emailSignup.addEventListener("change", (e) => {
   emailSignUpInput = e.target.value;
-  console.log(emailSignUpInput);
 });
 
 phoneSignup.addEventListener("change", (e) => {
   phoneInput = e.target.value;
-  console.log(phoneInput);
 });
 
 firstNameSignup.addEventListener("change", (e) => {
   firstNameInput = e.target.value;
-  console.log(firstNameInput);
 });
 
 lastNameSignup.addEventListener("change", (e) => {
   lastNameInput = e.target.value;
-  console.log(lastNameInput);
 });
 
 passwordSignUp.addEventListener("change", (e) => {
   passwordSignUpInput = e.target.value;
-  console.log(passwordSignUpInput);
 });
 
 confirmPasswordSignUp.addEventListener("change", (e) => {
   confirmPasswordInput = e.target.value;
-  console.log(confirmPasswordInput);
 });
 
 pwShowHide.forEach((icon) => {
@@ -166,6 +156,5 @@ signup_btn.addEventListener("click", (e) => {
 
 login_btn.addEventListener("click", (event) => {
   event.preventDefault();
-  console.log(emailInput, passwordInput);
   loginAuth();
 });

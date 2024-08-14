@@ -14,7 +14,7 @@ function toggleMaximize() {
 function minimizeChatbot() {
   const popup = document.getElementById("chatbot-popup");
   popup.classList.toggle("minimized");
-  isMaximized = false; // Set to false when minimizing
+  isMaximized = false; 
 }
 
 function toggleChatbot() {
@@ -33,18 +33,21 @@ function toggleChatbot() {
 
 function setIframeToken() {
   const fullUserDetails = JSON.parse(sessionStorage.getItem("authDetails"));
-  const access_token = fullUserDetails?.token.access_token;
-  const refresh_token = fullUserDetails?.token.refresh_token;
+  const accessToken = fullUserDetails?.token?.access_token;
+  const refreshToken = fullUserDetails?.token?.refresh_token;
 
-  const token = {
-    access_token,
-    refresh_token,
-  };
+  if (accessToken && refreshToken) {
+    const token = {
+      access_token: accessToken,
+      refresh_token: refreshToken,
+    };
 
-  const tokenString = encodeURIComponent(JSON.stringify(token));
-  const url = `http://54.146.243.168:8501?token=${tokenString}`;
+    const tokenString = encodeURIComponent(JSON.stringify(token));
+    const url = `http://54.146.243.168:8501?token=${tokenString}`;
 
-  const iframe = document.getElementById("chatbot-frame");
-  console.log("Setting iframe src to:", url);
-  iframe.src = url;
+    const iframe = document.getElementById("chatbot-frame");
+    iframe.src = url;
+  } else {
+    console.error("Token not found in session storage.");
+  }
 }
