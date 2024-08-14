@@ -78,7 +78,9 @@ document.addEventListener("DOMContentLoaded", function () {
       const billingsTemplate =
         document.getElementById("billingsTemplate").content;
 
-      patientData.billings.forEach((bill) => {
+      console.log(patientData.billings);
+
+      patientData.billings.forEach(async (bill) => {
         const billRow = document.importNode(billingsTemplate, true);
 
         // Populate the template with lab result data
@@ -98,11 +100,28 @@ document.addEventListener("DOMContentLoaded", function () {
             ? "#006b21"
             : "black";
         billRow.querySelector(".service-title").textContent = bill?.title;
-        billRow.querySelector(
-          ".provider"
-        ).textContent = `Dr ${bill?.doctor.first_name} ${bill?.doctor.last_name}`;
 
-        // Append the populated template to the container
+        // Fetch doctor details using the doctor_id
+        const doctorUrl = `http://13.48.48.198/v1/doctors/${bill.doctor_id}`;
+
+        try {
+          const response = await fetch(doctorUrl, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          const doctorData = await response.json();
+
+          billRow.querySelector(
+            ".provider"
+          ).textContent = `${doctorData.first_name} ${doctorData.last_name}`;
+        } catch (error) {
+          console.error("Error fetching doctor details:", error);
+          billRow.querySelector(".provider").textContent =
+            "Doctor information unavailable";
+        }
+
         dashboardBillContainer.appendChild(billRow);
       });
 
@@ -169,7 +188,7 @@ document.addEventListener("DOMContentLoaded", function () {
           appointment?.reason_for_appointment;
         appointmentCard.querySelector(
           ".doctor-name"
-        ).textContent = `Dr ${appointment?.doctor.first_name} ${appointment?.doctor.last_name}`;
+        ).textContent = `${appointment?.doctor.first_name} ${appointment?.doctor.last_name}`;
         appointmentCard.querySelector(
           ".doctor-title"
         ).textContent = `${appointment?.doctor.specialty}`;
@@ -229,7 +248,7 @@ document.addEventListener("DOMContentLoaded", function () {
           appointment?.reason_for_appointment;
         appointmentCard.querySelector(
           ".doctor-name"
-        ).textContent = `Dr ${appointment?.doctor.first_name} ${appointment?.doctor.last_name}`;
+        ).textContent = `${appointment?.doctor.first_name} ${appointment?.doctor.last_name}`;
         appointmentCard.querySelector(
           ".doctor-title"
         ).textContent = `${appointment?.doctor.specialty}`;
@@ -249,7 +268,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const doctorImg = appointmentCard.querySelector(".doctor-img img");
         doctorImg.src = "../../Assets/bearded-doctor-glasses.jpg";
-        doctorImg.alt = `Image of Dr ${appointment?.doctor.first_name} ${appointment?.doctor.last_name}`;
+        doctorImg.alt = `Image of ${appointment?.doctor.first_name} ${appointment?.doctor.last_name}`;
 
         // Append the populated template to the container
         appointmentContainer.appendChild(appointmentCard);
@@ -339,9 +358,10 @@ document.addEventListener("DOMContentLoaded", function () {
             ? "#006b21"
             : "black";
         billRow.querySelector(".service-title").textContent = bill?.title;
+
         billRow.querySelector(
           ".provider"
-        ).textContent = `Dr ${bill?.doctor.first_name} ${bill?.doctor.last_name}`;
+        ).textContent = `${bill?.doctor.first_name} ${bill?.doctor.last_name}`;
 
         // Append the populated template to the container
         billingsContainer.appendChild(billRow);
