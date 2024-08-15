@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const dashboardBillContainer =
       dashboardContainer.querySelector(".billings-table");
 
-    const url = `http://13.48.48.198/v1/auth/me`;
+    const url = `http://18.117.225.244/v1/auth/me`;
     // const patientData = JSON.parse(sessionStorage.getItem("patientDetails"));
     // console.log(patientData);
     try {
@@ -220,7 +220,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   async function upcomingAppointment(appointmentContainer) {
     console.log(appointmentContainer);
-    const url = `http://13.48.48.198/v1/appointments/?patient_id=${userData.user_id}`;
+    const url = `http://18.117.225.244/v1/appointments/?patient_id=${userData.user_id}`;
 
     try {
       const response = await fetch(url, {
@@ -280,7 +280,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   async function medications(prescriptionContainer) {
     console.log(prescriptionContainer);
-    const url = `http://13.48.48.198/v1/medications/?patient_id=${userData.user_id}`;
+    const url = `http://18.117.225.244/v1/medications/?patient_id=${userData.user_id}`;
 
     try {
       const response = await fetch(url, {
@@ -315,7 +315,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   async function billings(billingsContainer) {
-    const url = `http://13.48.48.198/v1/billings`;
+    const url = `http://18.117.225.244/v1/billings`;
 
     try {
       const response = await fetch(url, {
@@ -372,7 +372,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   async function patientProfile(profileContainer) {
-    const url = `http://13.48.48.198/v1/auth/me`;
+    const url = `http://18.117.225.244/v1/auth/me`;
 
     try {
       const response = await fetch(url, {

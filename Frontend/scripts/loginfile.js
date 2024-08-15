@@ -2,7 +2,7 @@ document
   .getElementById("login-form")
   .addEventListener("submit", async function (event) {
     event.preventDefault();
-    const url = `http://13.48.48.198/v1/auth/signin`;
+    const url = `http://18.117.225.244/v1/auth/signin`;
     const emailLogin = document.getElementById("emailLogin").value;
     const passwordLogin = document.getElementById("passwordLogin").value;
 

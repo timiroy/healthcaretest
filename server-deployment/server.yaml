@@ -107,7 +107,7 @@ Resources:
         Ref: AiHealthVPC
       CidrBlock: 10.0.1.0/24
       MapPublicIpOnLaunch: true
-      AvailabilityZone: us-east-1a
+      AvailabilityZone: us-east-2a
       Tags:
         - Key: Name
           Value: AiHealthPublicSubnet1
@@ -119,7 +119,7 @@ Resources:
         Ref: AiHealthVPC
       CidrBlock: 10.0.3.0/24
       MapPublicIpOnLaunch: true
-      AvailabilityZone: us-east-1b
+      AvailabilityZone: us-east-2b
       Tags:
         - Key: Name
           Value: AiHealthPublicSubnet2
@@ -130,7 +130,7 @@ Resources:
       VpcId: 
         Ref: AiHealthVPC
       CidrBlock: 10.0.2.0/24
-      AvailabilityZone: us-east-1a
+      AvailabilityZone: us-east-2a
       Tags:
         - Key: Name
           Value: AiHealthPrivateSubnet1
@@ -141,7 +141,7 @@ Resources:
       VpcId: 
         Ref: AiHealthVPC
       CidrBlock: 10.0.4.0/24
-      AvailabilityZone: us-east-1b
+      AvailabilityZone: us-east-2b
       Tags:
         - Key: Name
           Value: AiHealthPrivateSubnet2
@@ -327,22 +327,22 @@ Outputs:
       Ref: AiHealthVPC
 
   PublicSubnetId1:
-    Description: Public Subnet ID in AZ us-east-1a
+    Description: Public Subnet ID in AZ us-east-2a
     Value: 
       Ref: AiHealthPublicSubnet1
 
   PublicSubnetId2:
-    Description: Public Subnet ID in AZ us-east-1b
+    Description: Public Subnet ID in AZ us-east-2b
     Value: 
       Ref: AiHealthPublicSubnet2
 
   PrivateSubnetId1:
-    Description: Private Subnet ID in AZ us-east-1a
+    Description: Private Subnet ID in AZ us-east-2a
     Value: 
       Ref: AiHealthPrivateSubnet1
 
   PrivateSubnetId2:
-    Description: Private Subnet ID in AZ us-east-1b
+    Description: Private Subnet ID in AZ us-east-2b
     Value: 
       Ref: AiHealthPrivateSubnet2
 
